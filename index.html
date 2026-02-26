@@ -1,4 +1,3 @@
-<!-- COLE TUDO ISSO COMO index.html -->
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -436,7 +435,7 @@
           </div>
         </div>
 
-        <!-- FORM -->
+        <!-- FORM (com CNPJ) -->
         <div class="question-container" id="contactForm" data-step="5">
           <div class="question-title">Última etapa: seus dados para liberar o resultado</div>
           <div class="question-help">Ao enviar, você verá o resultado e poderá chamar no WhatsApp (wa.me).</div>
@@ -456,14 +455,26 @@
 
           <div class="grid">
             <div class="field">
+              <label for="cnpj">CNPJ *</label>
+              <input class="input" type="text" id="cnpj" inputmode="numeric" placeholder="00.000.000/0000-00" />
+              <div class="error" id="errCnpj">Informe um CNPJ válido.</div>
+            </div>
+            <div class="field">
               <label for="email">E-mail *</label>
               <input class="input" type="email" id="email" autocomplete="email" placeholder="voce@empresa.com" />
               <div class="error" id="errEmail">Informe um e-mail válido.</div>
             </div>
+          </div>
+
+          <div class="grid">
             <div class="field">
               <label for="phone">WhatsApp (com DDD) *</label>
               <input class="input" type="tel" id="phone" inputmode="numeric" autocomplete="tel" placeholder="(31) 98800-8600" />
               <div class="error" id="errPhone">Informe um WhatsApp válido.</div>
+            </div>
+            <div class="field" style="opacity:.95">
+              <label> </label>
+              <div class="subtitle" style="margin:0">* Campos obrigatórios</div>
             </div>
           </div>
 
@@ -490,7 +501,7 @@
       </div>
     </section>
 
-    <!-- SIDE (melhorado) -->
+    <!-- SIDE -->
     <aside class="panel side" aria-label="Informações">
       <div class="panel-inner">
         <h3>O que você vai receber</h3>
@@ -537,8 +548,7 @@
     // ====== CONFIG ======
     const WHATSAPP = '5531988008600';
     const PRIVACY_POLICY_URL = 'https://SEU-DOMINIO.com/politica-de-privacidade';
-    // Cole aqui a URL do seu DEPLOY do Apps Script (Web app), termina com /exec
-    const GOOGLE_SHEETS_WEBAPP_URL = 'COLE_AQUI_A_URL_DO_WEB_APP';
+    const GOOGLE_SHEETS_WEBAPP_URL = 'https://script.google.com/macros/s/AKfycbwJ-4UxfduN_nisIt1KLIaOV68LzJUm0-sVIX7EMsQADPNq-WoBtj9BdQlLxCulHqrI/exec';
     // ====================
 
     let currentQuestion = 1;
@@ -648,9 +658,43 @@
     }
     function onlyDigits(v){ return String(v || '').replace(/\D/g,''); }
 
+    function validateCnpj(raw){
+      const cnpj = onlyDigits(raw);
+      if(cnpj.length !== 14) return false;
+      if(/^(\d)\1+$/.test(cnpj)) return false;
+
+      const calc = (base) => {
+        let sum = 0;
+        let pos = base.length - 7;
+        for(let i = base.length; i >= 1; i--){
+          sum += Number(base.charAt(base.length - i)) * pos--;
+          if(pos < 2) pos = 9;
+        }
+        const mod = sum % 11;
+        return (mod < 2) ? 0 : (11 - mod);
+      };
+
+      const base12 = cnpj.substring(0,12);
+      const d1 = calc(base12);
+      const base13 = cnpj.substring(0,13);
+      const d2 = calc(base13);
+
+      return cnpj.endsWith(String(d1) + String(d2));
+    }
+
+    function maskCnpj(v){
+      v = onlyDigits(v).slice(0,14);
+      v = v.replace(/^(\d{2})(\d)/, '$1.$2');
+      v = v.replace(/^(\d{2})\.(\d{3})(\d)/, '$1.$2.$3');
+      v = v.replace(/\.(\d{3})(\d)/, '.$1/$2');
+      v = v.replace(/(\d{4})(\d)/, '$1-$2');
+      return v;
+    }
+
     function validateForm(){
       const name = document.getElementById('name').value.trim();
       const company = document.getElementById('company').value.trim();
+      const cnpj = document.getElementById('cnpj').value.trim();
       const email = document.getElementById('email').value.trim();
       const phone = onlyDigits(document.getElementById('phone').value);
       const lgpd = document.getElementById('lgpd').checked;
@@ -659,15 +703,20 @@
       const okCompany = company.length >= 2;
       const okEmail = validateEmail(email);
       const okPhone = phone.length >= 10 && phone.length <= 11;
+      const okCnpj = validateCnpj(cnpj);
       const okLgpd = lgpd;
 
       document.getElementById('errName').classList.toggle('show', !okName);
       document.getElementById('errCompany').classList.toggle('show', !okCompany);
       document.getElementById('errEmail').classList.toggle('show', !okEmail);
       document.getElementById('errPhone').classList.toggle('show', !okPhone);
+      document.getElementById('errCnpj').classList.toggle('show', !okCnpj);
       document.getElementById('errLgpd').classList.toggle('show', !okLgpd);
 
-      return { ok: okName && okCompany && okEmail && okPhone && okLgpd, name, company, email, phone, lgpd };
+      return {
+        ok: okName && okCompany && okCnpj && okEmail && okPhone && okLgpd,
+        name, company, cnpj: onlyDigits(cnpj), email, phone, lgpd
+      };
     }
 
     function scoreIt(){
@@ -731,6 +780,7 @@
         desc = `Com base nas informações, sua empresa ainda não atende aos critérios mínimos para antecipação no momento.`;
       }
 
+      // mensagem curta (como você pediu)
       const waMsg = `Olá! Quero antecipar meus recebíveis. Meu nome é ${name}, empresa ${company}, e-mail ${email}.`;
       const waLink = `https://wa.me/${WHATSAPP}?text=${encodeURIComponent(waMsg)}`;
 
@@ -766,12 +816,9 @@
       `;
     }
 
-    // --- Sheets send (mais robusto p/ navegação) ---
+    // --- Sheets send ---
     function sendToGoogleSheets(payload){
-      if(!GOOGLE_SHEETS_WEBAPP_URL || GOOGLE_SHEETS_WEBAPP_URL.includes('https://script.google.com/macros/s/AKfycbwNBCt-5A3hOKtkCyGLBuOARcNNHIt1J3Gn09TxgZk11yTLW_qOrrY6DEmsryn0YbGo/exec')){
-        console.warn('GOOGLE_SHEETS_WEBAPP_URL não configurada.');
-        return false;
-      }
+      if(!GOOGLE_SHEETS_WEBAPP_URL) return false;
 
       try{
         if (navigator.sendBeacon) {
@@ -817,6 +864,9 @@
       const phone = document.getElementById('phone');
       phone.addEventListener('input', (e) => { e.target.value = phoneMask(e.target.value); });
 
+      const cnpj = document.getElementById('cnpj');
+      cnpj.addEventListener('input', (e) => { e.target.value = maskCnpj(e.target.value); });
+
       document.getElementById('btnShowResult').addEventListener('click', () => {
         const note = document.getElementById('formNote');
         note.textContent = '';
@@ -838,22 +888,19 @@
           score,
           status,
           name: v.name,
+          company: v.company,
+          cnpj: v.cnpj,
           email: v.email,
           phone: v.phone,
-          company: v.company,
           lgpd_consent: true,
           privacy_policy_url: PRIVACY_POLICY_URL,
           answers: { ...answers },
           utm
         };
 
-        // mostra resultado
         showResult(score, v.name, v.company, v.email);
 
-        // envia pro sheets
         const ok = sendToGoogleSheets(payload);
-
-        // feedback visual
         setTimeout(() => {
           const sn = document.getElementById('sendNote');
           if(!sn) return;
