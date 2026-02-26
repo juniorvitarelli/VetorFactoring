@@ -1,0 +1,847 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pré-Qualificação Factoring - Aprovação em 60 Segundos</title>
+
+  <style>
+    :root{
+      --bg1:#0b1220;
+      --bg2:#0f172a;
+      --text:#e5e7eb;
+      --muted:#a7b0c0;
+      --border: rgba(255,255,255,.10);
+      --border2: rgba(255,255,255,.14);
+      --brand1:#7c3aed;
+      --brand2:#22c55e;
+      --shadow: 0 20px 60px rgba(0,0,0,.45);
+      --radius: 18px;
+    }
+    *{ box-sizing:border-box; margin:0; padding:0; }
+    html, body { height: 100%; }
+    body{
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+      color: var(--text);
+      background:
+        radial-gradient(1200px 600px at 15% 20%, rgba(124,58,237,.35), transparent 60%),
+        radial-gradient(900px 500px at 80% 10%, rgba(34,197,94,.22), transparent 55%),
+        linear-gradient(180deg, var(--bg1), var(--bg2));
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding: 24px;
+    }
+
+    .wrap{
+      width: min(860px, 100%);
+      display:grid;
+      grid-template-columns: 1.05fr .95fr;
+      gap: 18px;
+    }
+    @media (max-width: 860px){ .wrap{ grid-template-columns: 1fr; } }
+
+    .panel{
+      background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+    }
+    .panel-inner{ padding: 26px; }
+
+    .brandbar{
+      padding: 18px 26px;
+      background: linear-gradient(90deg, rgba(124,58,237,.25), rgba(34,197,94,.18));
+      border-bottom: 1px solid var(--border);
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 12px;
+    }
+
+    .pill{
+      display:inline-flex;
+      align-items:center;
+      gap: 8px;
+      font-size: 12px;
+      color: var(--text);
+      padding: 8px 10px;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      background: rgba(0,0,0,.18);
+      white-space: nowrap;
+    }
+
+    .title{
+      font-size: 26px;
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+      margin-bottom: 10px;
+    }
+
+    .subtitle{
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.55;
+      margin-bottom: 18px;
+    }
+
+    .progress{
+      height: 10px;
+      background: rgba(255,255,255,.08);
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      overflow:hidden;
+      margin: 18px 0 14px;
+    }
+    .progress > div{
+      height:100%;
+      width: 0%;
+      background: linear-gradient(90deg, var(--brand1), var(--brand2));
+      transition: width .25s ease;
+    }
+
+    .stephead{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+    .step{ color: var(--muted); font-size: 12px; }
+
+    .question-title{ font-size: 18px; font-weight: 700; margin-bottom: 6px; }
+    .question-help{ color: var(--muted); font-size: 13px; line-height: 1.5; margin-bottom: 14px; }
+
+    .question-container{ display:none; }
+    .question-container.active{ display:block; animation: fadeUp .25s ease; }
+    @keyframes fadeUp{ from{ opacity:0; transform:translateY(8px);} to{ opacity:1; transform:translateY(0);} }
+
+    .options{ display:grid; gap: 10px; }
+
+    .option{
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,.04);
+      border-radius: 14px;
+      padding: 14px 14px;
+      display:flex;
+      gap: 12px;
+      align-items:flex-start;
+      cursor:pointer;
+      transition: transform .18s ease, border-color .18s ease, background .18s ease;
+    }
+    .option:hover{ transform: translateY(-1px); border-color: var(--border2); background: rgba(255,255,255,.06); }
+    .option:focus-within{ outline: 2px solid rgba(124,58,237,.55); outline-offset: 2px; }
+
+    .option input{
+      margin-top: 2px;
+      width: 18px;
+      height: 18px;
+      accent-color: var(--brand1);
+      cursor:pointer;
+      flex: 0 0 auto;
+    }
+
+    .opt-text{ display:flex; flex-direction:column; gap:2px; }
+    .opt-text strong{ font-size:14px; font-weight:700; }
+    .opt-text span{ font-size:13px; color: var(--muted); }
+
+    .btnrow{ display:flex; gap:10px; margin-top:16px; }
+
+    .btn{
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,.06);
+      color: var(--text);
+      padding: 12px 14px;
+      border-radius: 12px;
+      font-weight: 700;
+      cursor:pointer;
+      transition: transform .18s ease, background .18s ease, border-color .18s ease, opacity .18s ease;
+      flex: 1;
+    }
+    .btn:hover{ transform: translateY(-1px); background: rgba(255,255,255,.08); border-color: var(--border2); }
+    .btn:disabled{ opacity:.45; cursor:not-allowed; transform:none; }
+
+    .btn-primary{
+      border-color: rgba(124,58,237,.45);
+      background: linear-gradient(135deg, rgba(124,58,237,.55), rgba(34,197,94,.25));
+    }
+    .btn-secondary{ background: rgba(0,0,0,.18); }
+
+    /* Sidebar */
+    .side h3{ font-size: 15px; margin-bottom: 10px; letter-spacing: -0.01em; }
+    .side p{ color: var(--muted); font-size: 13px; line-height: 1.55; margin-bottom: 12px; }
+    .cards{ display:grid; gap:10px; margin-top:10px; }
+
+    .mini{
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,.03);
+      border-radius: 14px;
+      padding: 12px;
+      display:flex;
+      gap: 10px;
+      align-items:flex-start;
+    }
+    .mini .ico{
+      width: 34px; height: 34px;
+      display:grid; place-items:center;
+      border-radius: 10px;
+      background: rgba(124,58,237,.18);
+      border: 1px solid rgba(124,58,237,.25);
+      flex: 0 0 auto;
+    }
+    .mini .ico2{ background: rgba(34,197,94,.14); border-color: rgba(34,197,94,.22); }
+    .mini strong{ display:block; font-size: 13px; margin-bottom: 2px; }
+    .mini span{ color: var(--muted); font-size: 12.5px; line-height:1.45; }
+
+    /* Form */
+    .grid{ display:grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    @media (max-width: 520px){ .grid{ grid-template-columns: 1fr; } }
+
+    .field{ display:flex; flex-direction:column; gap: 6px; margin-top: 10px; }
+    .field label{ font-size: 12px; color: var(--muted); }
+    .input{
+      border: 1px solid var(--border);
+      background: rgba(0,0,0,.18);
+      color: var(--text);
+      padding: 12px 12px;
+      border-radius: 12px;
+      font-size: 14px;
+      outline: none;
+      transition: border-color .18s ease, box-shadow .18s ease;
+    }
+    .input:focus{
+      border-color: rgba(124,58,237,.65);
+      box-shadow: 0 0 0 4px rgba(124,58,237,.18);
+    }
+    .error{ color:#fecaca; font-size:12px; margin-top:6px; display:none; }
+    .error.show{ display:block; }
+
+    /* LGPD */
+    .lgpd{
+      margin-top: 12px;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,.03);
+      border-radius: 14px;
+      padding: 12px;
+      display:flex;
+      gap: 10px;
+      align-items:flex-start;
+    }
+    .lgpd input{ margin-top: 2px; width: 18px; height: 18px; accent-color: var(--brand1); }
+    .lgpd p{ color: var(--muted); font-size: 12.5px; line-height: 1.45; margin: 0; }
+    .lgpd a{ color: #c4b5fd; text-decoration: underline; }
+
+    /* Result */
+    .result{ display:none; }
+    .result.active{ display:block; animation: fadeUp .25s ease; }
+
+    .result-top{ display:flex; gap: 12px; align-items:flex-start; margin-bottom: 12px; }
+    .emoji{
+      width: 44px; height: 44px;
+      display:grid; place-items:center;
+      border-radius: 14px;
+      background: rgba(255,255,255,.05);
+      border: 1px solid var(--border);
+      font-size: 22px;
+      flex: 0 0 auto;
+    }
+    .result h2{ font-size: 18px; margin-bottom: 6px; letter-spacing: -0.01em; }
+    .tag{
+      display:inline-flex;
+      padding: 6px 10px;
+      border-radius: 999px;
+      font-size: 12px;
+      border: 1px solid var(--border);
+      background: rgba(0,0,0,.15);
+      margin-top: 8px;
+    }
+    .tag.ok{ border-color: rgba(34,197,94,.35); }
+    .tag.warn{ border-color: rgba(245,158,11,.35); }
+    .tag.bad{ border-color: rgba(239,68,68,.35); }
+
+    .box{
+      margin-top: 12px;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,.03);
+      border-radius: 14px;
+      padding: 12px;
+    }
+    .box h3{ font-size: 13px; margin-bottom: 8px; }
+    .box ul{ list-style:none; display:grid; gap: 7px; }
+    .box li{
+      display:flex; gap: 10px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.45;
+    }
+    .box li::before{ content:"✓"; color: var(--brand2); font-weight: 900; }
+
+    .cta{
+      margin-top: 12px;
+      border-radius: 14px;
+      padding: 14px;
+      border: 1px solid rgba(34,197,94,.22);
+      background: linear-gradient(135deg, rgba(34,197,94,.14), rgba(124,58,237,.18));
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .cta a{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap: 10px;
+      text-decoration:none;
+      color: #04110a;
+      font-weight: 900;
+      padding: 12px 14px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #22c55e, #a3e635);
+      border: 1px solid rgba(255,255,255,.20);
+      transition: transform .18s ease;
+      white-space: nowrap;
+    }
+    .cta a:hover{ transform: translateY(-1px); }
+
+    .smallnote{ margin-top: 10px; color: var(--muted); font-size: 12.5px; line-height: 1.5; }
+  </style>
+</head>
+
+<body>
+  <div class="wrap">
+    <!-- MAIN -->
+    <section class="panel" aria-label="Pré-qualificação">
+      <div class="brandbar">
+        <div class="pill" title="Tempo estimado">⏱️ 60 segundos</div>
+        <div class="pill" title="Privacidade">🔒 Seus dados são protegidos</div>
+      </div>
+
+      <div class="panel-inner">
+        <h1 class="title">Descubra em 60 segundos se sua empresa está pré-aprovada</h1>
+        <p class="subtitle">Responda 4 perguntas rápidas e receba um direcionamento imediato sobre antecipação de recebíveis (sem compromisso).</p>
+
+        <div class="progress" aria-label="Progresso"><div id="progressBar"></div></div>
+
+        <div class="stephead">
+          <div class="step" id="stepText">Etapa 1 de 5</div>
+          <div class="step" id="stepHint">Selecione uma opção</div>
+        </div>
+
+        <!-- Q1 -->
+        <div class="question-container active" id="question1" data-step="1">
+          <div class="question-title">1) Há quanto tempo sua empresa está em operação?</div>
+          <div class="question-help">Precisamos de empresas com histórico mínimo de atividade.</div>
+
+          <div class="options" role="radiogroup" aria-label="Tempo de operação">
+            <div class="option" tabindex="0" data-radio="q1a">
+              <input type="radio" name="q1" id="q1a" value="menos6" />
+              <div class="opt-text"><strong>Menos de 6 meses</strong><span>Pode exigir análise adicional.</span></div>
+            </div>
+            <div class="option" tabindex="0" data-radio="q1b">
+              <input type="radio" name="q1" id="q1b" value="6a12" />
+              <div class="opt-text"><strong>Entre 6 meses e 1 ano</strong><span>Depende dos demais fatores.</span></div>
+            </div>
+            <div class="option" tabindex="0" data-radio="q1c">
+              <input type="radio" name="q1" id="q1c" value="mais1" />
+              <div class="opt-text"><strong>Mais de 1 ano ✅</strong><span>Excelente histórico.</span></div>
+            </div>
+          </div>
+
+          <div class="btnrow">
+            <button class="btn btn-primary" id="btnNext1" disabled>Próxima →</button>
+          </div>
+        </div>
+
+        <!-- Q2 -->
+        <div class="question-container" id="question2" data-step="2">
+          <div class="question-title">2) Qual é o faturamento mensal médio da sua empresa?</div>
+          <div class="question-help">Precisamos de um volume mínimo para viabilizar a operação.</div>
+
+          <div class="options" role="radiogroup" aria-label="Faturamento mensal">
+            <div class="option" tabindex="0" data-radio="q2a">
+              <input type="radio" name="q2" id="q2a" value="menos30" />
+              <div class="opt-text"><strong>Menos de R$ 30.000</strong><span>Pode limitar o teto.</span></div>
+            </div>
+            <div class="option" tabindex="0" data-radio="q2b">
+              <input type="radio" name="q2" id="q2b" value="30a50" />
+              <div class="opt-text"><strong>Entre R$ 30.000 e R$ 50.000</strong><span>Faixa comum.</span></div>
+            </div>
+            <div class="option" tabindex="0" data-radio="q2c">
+              <input type="radio" name="q2" id="q2c" value="mais50" />
+              <div class="opt-text"><strong>Acima de R$ 50.000 ✅</strong><span>Melhor cenário.</span></div>
+            </div>
+          </div>
+
+          <div class="btnrow">
+            <button class="btn btn-secondary" id="btnBack2">← Voltar</button>
+            <button class="btn btn-primary" id="btnNext2" disabled>Próxima →</button>
+          </div>
+        </div>
+
+        <!-- Q3 -->
+        <div class="question-container" id="question3" data-step="3">
+          <div class="question-title">3) Sua empresa possui certidões negativas válidas?</div>
+          <div class="question-help">Federal, Estadual, Municipal, FGTS e Trabalhista.</div>
+
+          <div class="options" role="radiogroup" aria-label="Certidões">
+            <div class="option" tabindex="0" data-radio="q3a">
+              <input type="radio" name="q3" id="q3a" value="sim" />
+              <div class="opt-text"><strong>Sim, todas em dia ✅</strong><span>Ótimo: reduz atritos.</span></div>
+            </div>
+            <div class="option" tabindex="0" data-radio="q3b">
+              <input type="radio" name="q3" id="q3b" value="naosei" />
+              <div class="opt-text"><strong>Não sei / Preciso verificar</strong><span>Podemos orientar.</span></div>
+            </div>
+            <div class="option" tabindex="0" data-radio="q3c">
+              <input type="radio" name="q3" id="q3c" value="nao" />
+              <div class="opt-text"><strong>Não, tenho pendências</strong><span>Geralmente precisa regularizar.</span></div>
+            </div>
+          </div>
+
+          <div class="btnrow">
+            <button class="btn btn-secondary" id="btnBack3">← Voltar</button>
+            <button class="btn btn-primary" id="btnNext3" disabled>Próxima →</button>
+          </div>
+        </div>
+
+        <!-- Q4 -->
+        <div class="question-container" id="question4" data-step="4">
+          <div class="question-title">4) Seus clientes (pagadores) são empresas estabelecidas?</div>
+          <div class="question-help">Avaliamos a solidez de quem vai pagar as duplicatas.</div>
+
+          <div class="options" role="radiogroup" aria-label="Clientes">
+            <div class="option" tabindex="0" data-radio="q4a">
+              <input type="radio" name="q4" id="q4a" value="sim" />
+              <div class="opt-text"><strong>Sim, empresas sólidas ✅</strong><span>Melhor cenário.</span></div>
+            </div>
+            <div class="option" tabindex="0" data-radio="q4b">
+              <input type="radio" name="q4" id="q4b" value="misto" />
+              <div class="opt-text"><strong>Misto</strong><span>Depende do mix.</span></div>
+            </div>
+            <div class="option" tabindex="0" data-radio="q4c">
+              <input type="radio" name="q4" id="q4c" value="nao" />
+              <div class="opt-text"><strong>Maioria pequena/informal</strong><span>Pode dificultar limites.</span></div>
+            </div>
+          </div>
+
+          <div class="btnrow">
+            <button class="btn btn-secondary" id="btnBack4">← Voltar</button>
+            <button class="btn btn-primary" id="btnToForm" disabled>Ver resultado →</button>
+          </div>
+        </div>
+
+        <!-- FORM -->
+        <div class="question-container" id="contactForm" data-step="5">
+          <div class="question-title">Última etapa: seus dados para liberar o resultado</div>
+          <div class="question-help">Ao enviar, você verá o resultado e poderá chamar no WhatsApp (wa.me).</div>
+
+          <div class="grid">
+            <div class="field">
+              <label for="name">Nome completo *</label>
+              <input class="input" type="text" id="name" autocomplete="name" placeholder="Ex: José Vitarelli" />
+              <div class="error" id="errName">Informe seu nome.</div>
+            </div>
+            <div class="field">
+              <label for="company">Empresa *</label>
+              <input class="input" type="text" id="company" autocomplete="organization" placeholder="Ex: Minha Empresa LTDA" />
+              <div class="error" id="errCompany">Informe o nome da empresa.</div>
+            </div>
+          </div>
+
+          <div class="grid">
+            <div class="field">
+              <label for="email">E-mail *</label>
+              <input class="input" type="email" id="email" autocomplete="email" placeholder="voce@empresa.com" />
+              <div class="error" id="errEmail">Informe um e-mail válido.</div>
+            </div>
+            <div class="field">
+              <label for="phone">WhatsApp (com DDD) *</label>
+              <input class="input" type="tel" id="phone" inputmode="numeric" autocomplete="tel" placeholder="(31) 98800-8600" />
+              <div class="error" id="errPhone">Informe um WhatsApp válido.</div>
+            </div>
+          </div>
+
+          <div class="lgpd">
+            <input type="checkbox" id="lgpd" />
+            <p>
+              Eu concordo com o tratamento dos meus dados para fins de contato e análise, conforme a
+              <a id="policyLink" href="#" target="_blank" rel="noopener">Política de Privacidade</a>.
+              *
+            </p>
+          </div>
+          <div class="error" id="errLgpd">Você precisa aceitar a Política de Privacidade para continuar.</div>
+
+          <div class="btnrow">
+            <button class="btn btn-secondary" id="btnBackForm">← Voltar</button>
+            <button class="btn btn-primary" id="btnShowResult">🎯 Ver meu resultado</button>
+          </div>
+
+          <div class="smallnote" id="formNote" aria-live="polite"></div>
+        </div>
+
+        <!-- RESULTADO -->
+        <div class="result" id="resultContainer" aria-live="polite"></div>
+      </div>
+    </section>
+
+    <!-- SIDE -->
+    <aside class="panel side" aria-label="Informações">
+      <div class="panel-inner">
+        <h3>Como funciona</h3>
+        <p>Você responde 4 perguntas, informa seus dados e recebe o resultado. Se quiser, clica para chamar no WhatsApp via <strong>wa.me</strong>.</p>
+
+        <div class="cards">
+          <div class="mini">
+            <div class="ico">📊</div>
+            <div>
+              <strong>Registro no Sheets</strong>
+              <span>Salvamos score, respostas, dados e UTMs no Google Sheets.</span>
+            </div>
+          </div>
+          <div class="mini">
+            <div class="ico ico2">📱</div>
+            <div>
+              <strong>WhatsApp simples</strong>
+              <span>Mensagem curta: Nome + Empresa + Email.</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="box" style="margin-top: 14px;">
+          <h3>Ajustes</h3>
+          <ul>
+            <li>Trocar o link da política de privacidade.</li>
+            <li>Colar a URL do Web App do Apps Script.</li>
+          </ul>
+        </div>
+      </div>
+    </aside>
+  </div>
+
+  <script>
+    // ====== CONFIG ======
+    const WHATSAPP = '5531988008600';
+    const PRIVACY_POLICY_URL = 'https://SEU-DOMINIO.com/politica-de-privacidade';
+    const GOOGLE_SHEETS_WEBAPP_URL = 'https://script.google.com/macros/s/AKfycbwNBCt-5A3hOKtkCyGLBuOARcNNHIt1J3Gn09TxgZk11yTLW_qOrrY6DEmsryn0YbGo/exec';
+    // ====================
+
+    let currentQuestion = 1;
+    const answers = {};
+    const totalSteps = 5;
+
+    // --- UTM capture ---
+    function getParams(){
+      const url = new URL(window.location.href);
+      const o = {};
+      url.searchParams.forEach((v,k)=> o[k] = v);
+      return o;
+    }
+    function captureUtm(){
+      const p = getParams();
+      const utm = {
+        utm_source: p.utm_source || '',
+        utm_campaign: p.utm_campaign || '',
+        utm_medium: p.utm_medium || '',
+        utm_content: p.utm_content || '',
+        utm_term: p.utm_term || '',
+        gclid: p.gclid || '',
+        fbclid: p.fbclid || ''
+      };
+      localStorage.setItem('lp_utm', JSON.stringify(utm));
+      return utm;
+    }
+    function readUtm(){
+      try{
+        const s = localStorage.getItem('lp_utm');
+        if(s) return JSON.parse(s);
+      }catch(e){}
+      return captureUtm();
+    }
+
+    // --- UI helpers ---
+    function setActive(idToShow){
+      document.querySelectorAll('.question-container').forEach(el => el.classList.remove('active'));
+      const el = document.getElementById(idToShow);
+      el.classList.add('active');
+      currentQuestion = Number(el.dataset.step || 1);
+      updateProgress();
+      updateStepText();
+    }
+    function updateProgress(){
+      const progress = Math.round((currentQuestion / totalSteps) * 100);
+      document.getElementById('progressBar').style.width = progress + '%';
+    }
+    function updateStepText(){
+      document.getElementById('stepText').textContent = `Etapa ${currentQuestion} de ${totalSteps}`;
+      document.getElementById('stepHint').textContent = currentQuestion <= 4 ? 'Selecione uma opção' : 'Preencha seus dados';
+    }
+    function firstName(full){
+      return (full || '').trim().split(/\s+/)[0] || 'Olá';
+    }
+
+    // clique no card seleciona o radio
+    function wireOptionCards(){
+      document.querySelectorAll('.option').forEach(card => {
+        const id = card.getAttribute('data-radio');
+        if(!id) return;
+        const input = document.getElementById(id);
+
+        card.addEventListener('click', () => {
+          input.checked = true;
+          input.dispatchEvent(new Event('change', { bubbles: true }));
+        });
+
+        card.addEventListener('keydown', (e) => {
+          if(e.key === 'Enter' || e.key === ' '){
+            e.preventDefault();
+            input.checked = true;
+            input.dispatchEvent(new Event('change', { bubbles: true }));
+          }
+        });
+      });
+    }
+
+    function setNextEnabled(qNumber, enabled){
+      const btn = document.getElementById(`btnNext${qNumber}`) || (qNumber === 4 ? document.getElementById('btnToForm') : null);
+      if(btn) btn.disabled = !enabled;
+    }
+
+    function watchRadios(){
+      [1,2,3,4].forEach(n => {
+        const radios = document.querySelectorAll(`input[name="q${n}"]`);
+        radios.forEach(r => {
+          r.addEventListener('change', () => {
+            answers[`q${n}`] = document.querySelector(`input[name="q${n}"]:checked`)?.value;
+            setNextEnabled(n, true);
+          });
+        });
+      });
+    }
+
+    function goNext(from){
+      if(!answers[`q${from}`]) return;
+      const nextMap = {1:'question2', 2:'question3', 3:'question4'};
+      setActive(nextMap[from]);
+    }
+    function goBack(toId){ setActive(toId); }
+    function openForm(){ if(!answers.q4) return; setActive('contactForm'); }
+
+    // --- Validation & scoring ---
+    function validateEmail(v){
+      return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(v || '').trim());
+    }
+    function onlyDigits(v){ return String(v || '').replace(/\D/g,''); }
+
+    function validateForm(){
+      const name = document.getElementById('name').value.trim();
+      const company = document.getElementById('company').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const phone = onlyDigits(document.getElementById('phone').value);
+      const lgpd = document.getElementById('lgpd').checked;
+
+      const okName = name.length >= 3;
+      const okCompany = company.length >= 2;
+      const okEmail = validateEmail(email);
+      const okPhone = phone.length >= 10 && phone.length <= 11;
+      const okLgpd = lgpd;
+
+      document.getElementById('errName').classList.toggle('show', !okName);
+      document.getElementById('errCompany').classList.toggle('show', !okCompany);
+      document.getElementById('errEmail').classList.toggle('show', !okEmail);
+      document.getElementById('errPhone').classList.toggle('show', !okPhone);
+      document.getElementById('errLgpd').classList.toggle('show', !okLgpd);
+
+      return { ok: okName && okCompany && okEmail && okPhone && okLgpd, name, company, email, phone, lgpd };
+    }
+
+    function scoreIt(){
+      let score = 0;
+      if (answers.q1 === 'mais1') score += 3;
+      else if (answers.q1 === '6a12') score += 2;
+
+      if (answers.q2 === 'mais50') score += 3;
+      else if (answers.q2 === '30a50') score += 2;
+
+      if (answers.q3 === 'sim') score += 3;
+      else if (answers.q3 === 'naosei') score += 1;
+
+      if (answers.q4 === 'sim') score += 3;
+      else if (answers.q4 === 'misto') score += 2;
+
+      return score;
+    }
+
+    function phoneMask(v){
+      v = onlyDigits(v).slice(0, 11);
+      if(v.length <= 10){
+        return v.replace(/^(\d{2})(\d)/, '($1) $2').replace(/(\d{4})(\d{4})$/, '$1-$2');
+      }
+      return v.replace(/^(\d{2})(\d)/, '($1) $2').replace(/(\d{5})(\d{4})$/, '$1-$2');
+    }
+
+    // --- Result UI ---
+    function showResult(score, name, company, email){
+      // esconder form e mostrar resultado
+      document.getElementById('contactForm').classList.remove('active');
+      const result = document.getElementById('resultContainer');
+      result.classList.add('active');
+
+      // progress 100%
+      currentQuestion = 5;
+      updateProgress();
+      updateStepText();
+
+      let tagClass = 'warn';
+      let tagText = 'EM ANÁLISE';
+      let emoji = '⚠️';
+      let title = `${firstName(name)}, precisamos de mais informações`;
+      let desc = `Sua empresa <strong>${company}</strong> pode se enquadrar, mas precisamos avaliar alguns detalhes.`;
+
+      if(score >= 10){
+        tagClass = 'ok';
+        tagText = 'PRÉ-APROVADO';
+        emoji = '🎉';
+        title = `Parabéns, ${firstName(name)}!`;
+        desc = `Sua empresa <strong>${company}</strong> está <strong>PRÉ-APROVADA</strong> para antecipação de recebíveis.`;
+      } else if(score < 6){
+        tagClass = 'bad';
+        tagText = 'NÃO ELEGÍVEL AGORA';
+        emoji = '😕';
+        title = `${firstName(name)}, ainda não é o momento ideal`;
+        desc = `Com base nas informações, sua empresa ainda não atende aos critérios mínimos para antecipação no momento.`;
+      }
+
+      // WhatsApp message (SÓ Nome + Empresa + Email)
+      const waMsg = `Olá! Quero antecipar meus recebíveis. Meu nome é ${name}, empresa ${company}, e-mail ${email}.`;
+      const waLink = `https://wa.me/${WHATSAPP}?text=${encodeURIComponent(waMsg)}`;
+
+      result.innerHTML = `
+        <div class="result-top">
+          <div class="emoji">${emoji}</div>
+          <div>
+            <h2>${title}</h2>
+            <div class="tag ${tagClass}">${tagText}</div>
+          </div>
+        </div>
+
+        <p class="subtitle">${desc}</p>
+
+        <div class="box">
+          <h3>✅ Próximo passo</h3>
+          <ul>
+            <li>Clique no botão abaixo para falar no WhatsApp</li>
+            <li>Nosso time vai te orientar nos documentos e recebíveis</li>
+            <li>Você recebe a proposta conforme seu perfil</li>
+          </ul>
+        </div>
+
+        <div class="cta">
+          <div>
+            <strong>Falar no WhatsApp</strong><br/>
+            <span class="subtitle" style="margin:0;">Mensagem curta com seus dados básicos.</span>
+          </div>
+          <a id="waCta" href="${waLink}" target="_blank" rel="noopener">📱 WhatsApp</a>
+        </div>
+
+        <div class="smallnote">📧 Seus dados foram registrados para acompanhamento.</div>
+      `;
+
+      return waLink;
+    }
+
+    // --- Google Sheets send (sem bloquear click pro wa.me) ---
+    function sendToGoogleSheets(payload){
+      if(!GOOGLE_SHEETS_WEBAPP_URL || GOOGLE_SHEETS_WEBAPP_URL.includes('COLE_AQUI')){
+        console.warn('GOOGLE_SHEETS_WEBAPP_URL não configurada.');
+        return;
+      }
+      // sendBeacon (melhor)
+      try{
+        if (navigator.sendBeacon) {
+          const blob = new Blob([JSON.stringify(payload)], { type: 'application/json' });
+          navigator.sendBeacon(GOOGLE_SHEETS_WEBAPP_URL, blob);
+          return;
+        }
+      }catch(e){}
+      // fallback
+      try{
+        fetch(GOOGLE_SHEETS_WEBAPP_URL, {
+          method: 'POST',
+          mode: 'no-cors',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload),
+          keepalive: true
+        });
+      }catch(e){}
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      document.getElementById('policyLink').href = PRIVACY_POLICY_URL;
+      captureUtm();
+
+      wireOptionCards();
+      watchRadios();
+      updateProgress();
+      updateStepText();
+
+      document.getElementById('btnNext1').addEventListener('click', () => goNext(1));
+      document.getElementById('btnNext2').addEventListener('click', () => goNext(2));
+      document.getElementById('btnNext3').addEventListener('click', () => goNext(3));
+
+      document.getElementById('btnBack2').addEventListener('click', () => goBack('question1'));
+      document.getElementById('btnBack3').addEventListener('click', () => goBack('question2'));
+      document.getElementById('btnBack4').addEventListener('click', () => goBack('question3'));
+
+      document.getElementById('btnToForm').addEventListener('click', openForm);
+      document.getElementById('btnBackForm').addEventListener('click', () => goBack('question4'));
+
+      // máscara telefone
+      const phone = document.getElementById('phone');
+      phone.addEventListener('input', (e) => { e.target.value = phoneMask(e.target.value); });
+
+      // Botão que mostra o resultado
+      document.getElementById('btnShowResult').addEventListener('click', () => {
+        const note = document.getElementById('formNote');
+        note.textContent = '';
+
+        const v = validateForm();
+        if(!v.ok){
+          note.textContent = 'Revise os campos destacados acima.';
+          return;
+        }
+
+        const score = scoreIt();
+        const utm = readUtm();
+
+        // payload completo pro Sheets
+        const payload = {
+          timestamp: new Date().toISOString(),
+          page_url: window.location.href,
+          referrer: document.referrer || '',
+          score,
+          name: v.name,
+          email: v.email,
+          phone: v.phone,
+          company: v.company,
+          lgpd_consent: true,
+          privacy_policy_url: PRIVACY_POLICY_URL,
+          answers: { ...answers },
+          utm
+        };
+
+        // envia pro Sheets agora
+        sendToGoogleSheets(payload);
+
+        // mostra resultado agora
+        showResult(score, v.name, v.company, v.email);
+
+        // ao clicar no WhatsApp, não precisamos enviar nada extra (já salvou)
+      });
+    });
+  </script>
+</body>
+</html>
