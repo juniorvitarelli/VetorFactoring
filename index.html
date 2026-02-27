@@ -21,7 +21,7 @@
     *{ box-sizing:border-box; margin:0; padding:0; }
     html, body { height: 100%; }
     body{
-      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
       color: var(--text);
       background:
         radial-gradient(1200px 600px at 15% 20%, rgba(124,58,237,.35), transparent 60%),
@@ -40,13 +40,11 @@
       gap: 18px;
     }
 
-    /* Mobile: vira 1 coluna e o painel da direita fica embaixo */
     @media (max-width: 860px){
       .wrap{ grid-template-columns: 1fr; }
       section.panel{ order: 1; }
       aside.panel.side{ order: 2; }
     }
-
     @media (max-width: 520px){
       body { padding: 14px; }
       .panel-inner { padding: 18px !important; }
@@ -71,13 +69,9 @@
       justify-content:space-between;
       gap: 12px;
     }
-
     .pill{
-      display:inline-flex;
-      align-items:center;
-      gap: 8px;
-      font-size: 12px;
-      color: var(--text);
+      display:inline-flex; align-items:center; gap: 8px;
+      font-size: 12px; color: var(--text);
       padding: 8px 10px;
       border: 1px solid var(--border);
       border-radius: 999px;
@@ -85,42 +79,22 @@
       white-space: nowrap;
     }
 
-    .title{
-      font-size: 26px;
-      line-height: 1.15;
-      letter-spacing: -0.02em;
-      margin-bottom: 10px;
-    }
-
-    .subtitle{
-      color: var(--muted);
-      font-size: 14px;
-      line-height: 1.55;
-      margin-bottom: 18px;
-    }
+    .title{ font-size: 26px; line-height: 1.15; margin-bottom: 10px; }
+    .subtitle{ color: var(--muted); font-size: 14px; line-height: 1.55; margin-bottom: 18px; }
 
     .progress{
-      height: 10px;
-      background: rgba(255,255,255,.08);
+      height: 10px; background: rgba(255,255,255,.08);
       border: 1px solid var(--border);
-      border-radius: 999px;
-      overflow:hidden;
+      border-radius: 999px; overflow:hidden;
       margin: 18px 0 14px;
     }
     .progress > div{
-      height:100%;
-      width: 0%;
+      height:100%; width: 0%;
       background: linear-gradient(90deg, var(--brand1), var(--brand2));
       transition: width .25s ease;
     }
 
-    .stephead{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap: 12px;
-      margin-bottom: 12px;
-    }
+    .stephead{ display:flex; justify-content:space-between; gap: 12px; margin-bottom: 12px; }
     .step{ color: var(--muted); font-size: 12px; }
 
     .question-title{ font-size: 18px; font-weight: 700; margin-bottom: 6px; }
@@ -131,36 +105,21 @@
     @keyframes fadeUp{ from{ opacity:0; transform:translateY(8px);} to{ opacity:1; transform:translateY(0);} }
 
     .options{ display:grid; gap: 10px; }
-
     .option{
       border: 1px solid var(--border);
       background: rgba(255,255,255,.04);
       border-radius: 14px;
       padding: 14px 14px;
-      display:flex;
-      gap: 12px;
-      align-items:flex-start;
+      display:flex; gap: 12px; align-items:flex-start;
       cursor:pointer;
-      transition: transform .18s ease, border-color .18s ease, background .18s ease;
     }
-    .option:hover{ transform: translateY(-1px); border-color: var(--border2); background: rgba(255,255,255,.06); }
-    .option:focus-within{ outline: 2px solid rgba(124,58,237,.55); outline-offset: 2px; }
+    .option:hover{ border-color: var(--border2); background: rgba(255,255,255,.06); }
+    .option input{ margin-top: 2px; width: 18px; height: 18px; accent-color: var(--brand1); }
 
-    .option input{
-      margin-top: 2px;
-      width: 18px;
-      height: 18px;
-      accent-color: var(--brand1);
-      cursor:pointer;
-      flex: 0 0 auto;
-    }
-
-    .opt-text{ display:flex; flex-direction:column; gap:2px; }
-    .opt-text strong{ font-size:14px; font-weight:700; }
+    .opt-text strong{ font-size:14px; display:block; }
     .opt-text span{ font-size:13px; color: var(--muted); }
 
     .btnrow{ display:flex; gap:10px; margin-top:16px; }
-
     .btn{
       border: 1px solid var(--border);
       background: rgba(255,255,255,.06);
@@ -169,40 +128,14 @@
       border-radius: 12px;
       font-weight: 700;
       cursor:pointer;
-      transition: transform .18s ease, background .18s ease, border-color .18s ease, opacity .18s ease;
       flex: 1;
     }
-    .btn:hover{ transform: translateY(-1px); background: rgba(255,255,255,.08); border-color: var(--border2); }
-    .btn:disabled{ opacity:.45; cursor:not-allowed; transform:none; }
-
+    .btn:disabled{ opacity:.45; cursor:not-allowed; }
     .btn-primary{
       border-color: rgba(124,58,237,.45);
       background: linear-gradient(135deg, rgba(124,58,237,.55), rgba(34,197,94,.25));
     }
     .btn-secondary{ background: rgba(0,0,0,.18); }
-
-    .cards{ display:grid; gap:10px; margin-top:10px; }
-    .mini{
-      border: 1px solid var(--border);
-      background: rgba(255,255,255,.03);
-      border-radius: 14px;
-      padding: 12px;
-      display:flex;
-      gap: 10px;
-      align-items:flex-start;
-    }
-    .mini .ico{
-      width: 34px; height: 34px;
-      display:grid; place-items:center;
-      border-radius: 10px;
-      background: rgba(124,58,237,.18);
-      border: 1px solid rgba(124,58,237,.25);
-      flex: 0 0 auto;
-    }
-    .mini .ico2{ background: rgba(34,197,94,.14); border-color: rgba(34,197,94,.22); }
-    .mini .ico3{ background: rgba(6,182,212,.14); border-color: rgba(6,182,212,.22); }
-    .mini strong{ display:block; font-size: 13px; margin-bottom: 2px; }
-    .mini span{ color: var(--muted); font-size: 12.5px; line-height:1.45; }
 
     .grid{ display:grid; grid-template-columns: 1fr 1fr; gap: 10px; }
     @media (max-width: 520px){ .grid{ grid-template-columns: 1fr; } }
@@ -217,11 +150,6 @@
       border-radius: 12px;
       font-size: 14px;
       outline: none;
-      transition: border-color .18s ease, box-shadow .18s ease;
-    }
-    .input:focus{
-      border-color: rgba(124,58,237,.65);
-      box-shadow: 0 0 0 4px rgba(124,58,237,.18);
     }
     .error{ color:#fecaca; font-size:12px; margin-top:6px; display:none; }
     .error.show{ display:block; }
@@ -232,57 +160,13 @@
       background: rgba(255,255,255,.03);
       border-radius: 14px;
       padding: 12px;
-      display:flex;
-      gap: 10px;
-      align-items:flex-start;
+      display:flex; gap: 10px; align-items:flex-start;
     }
     .lgpd input{ margin-top: 2px; width: 18px; height: 18px; accent-color: var(--brand1); }
-    .lgpd p{ color: var(--muted); font-size: 12.5px; line-height: 1.45; margin: 0; }
     .lgpd a{ color: #c4b5fd; text-decoration: underline; }
 
     .result{ display:none; }
-    .result.active{ display:block; animation: fadeUp .25s ease; }
-
-    .result-top{ display:flex; gap: 12px; align-items:flex-start; margin-bottom: 12px; }
-    .emoji{
-      width: 44px; height: 44px;
-      display:grid; place-items:center;
-      border-radius: 14px;
-      background: rgba(255,255,255,.05);
-      border: 1px solid var(--border);
-      font-size: 22px;
-      flex: 0 0 auto;
-    }
-    .result h2{ font-size: 18px; margin-bottom: 6px; letter-spacing: -0.01em; }
-    .tag{
-      display:inline-flex;
-      padding: 6px 10px;
-      border-radius: 999px;
-      font-size: 12px;
-      border: 1px solid var(--border);
-      background: rgba(0,0,0,.15);
-      margin-top: 8px;
-    }
-    .tag.ok{ border-color: rgba(34,197,94,.35); }
-    .tag.warn{ border-color: rgba(245,158,11,.35); }
-    .tag.bad{ border-color: rgba(239,68,68,.35); }
-
-    .box{
-      margin-top: 12px;
-      border: 1px solid var(--border);
-      background: rgba(255,255,255,.03);
-      border-radius: 14px;
-      padding: 12px;
-    }
-    .box h3{ font-size: 13px; margin-bottom: 8px; }
-    .box ul{ list-style:none; display:grid; gap: 7px; }
-    .box li{
-      display:flex; gap: 10px;
-      color: var(--muted);
-      font-size: 13px;
-      line-height: 1.45;
-    }
-    .box li::before{ content:"✓"; color: var(--brand2); font-weight: 900; }
+    .result.active{ display:block; }
 
     .cta{
       margin-top: 12px;
@@ -290,34 +174,40 @@
       padding: 14px;
       border: 1px solid rgba(34,197,94,.22);
       background: linear-gradient(135deg, rgba(34,197,94,.14), rgba(124,58,237,.18));
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap: 12px;
-      flex-wrap: wrap;
+      display:flex; justify-content:space-between; gap: 12px; flex-wrap: wrap;
     }
     .cta a{
-      display:inline-flex;
-      align-items:center;
-      justify-content:center;
-      gap: 10px;
-      text-decoration:none;
-      color: #04110a;
-      font-weight: 900;
-      padding: 12px 14px;
-      border-radius: 12px;
+      display:inline-flex; align-items:center; justify-content:center;
+      text-decoration:none; color: #04110a; font-weight: 900;
+      padding: 12px 14px; border-radius: 12px;
       background: linear-gradient(135deg, #22c55e, #a3e635);
-      border: 1px solid rgba(255,255,255,.20);
-      transition: transform .18s ease;
       white-space: nowrap;
     }
-    .cta a:hover{ transform: translateY(-1px); }
+
+    aside.panel.side h3{ font-size: 15px; margin-bottom: 10px; }
+    .cards{ display:grid; gap:10px; margin-top:10px; }
+    .mini{
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,.03);
+      border-radius: 14px;
+      padding: 12px;
+      display:flex; gap: 10px; align-items:flex-start;
+    }
+    .mini .ico{
+      width: 34px; height: 34px; display:grid; place-items:center;
+      border-radius: 10px;
+      background: rgba(124,58,237,.18);
+      border: 1px solid rgba(124,58,237,.25);
+      flex: 0 0 auto;
+    }
+    .mini strong{ display:block; font-size: 13px; margin-bottom: 2px; }
+    .mini span{ color: var(--muted); font-size: 12.5px; line-height:1.45; }
   </style>
 </head>
 
 <body>
   <div class="wrap">
-    <section class="panel" aria-label="Pré-qualificação">
+    <section class="panel">
       <div class="brandbar">
         <div class="pill">⏱️ 60 segundos</div>
         <div class="pill">🔒 Seus dados são protegidos</div>
@@ -325,7 +215,7 @@
 
       <div class="panel-inner">
         <h1 class="title">Descubra em 60 segundos se sua empresa está pré-aprovada</h1>
-        <p class="subtitle">Responda 4 perguntas rápidas e receba um direcionamento imediato sobre antecipação de recebíveis (sem compromisso).</p>
+        <p class="subtitle">Responda 4 perguntas rápidas e receba um direcionamento imediato sobre antecipação de recebíveis.</p>
 
         <div class="progress"><div id="progressBar"></div></div>
 
@@ -339,22 +229,11 @@
           <div class="question-title">1) Há quanto tempo sua empresa está em operação?</div>
           <div class="question-help">Precisamos de empresas com histórico mínimo de atividade.</div>
           <div class="options">
-            <div class="option" tabindex="0" data-radio="q1a">
-              <input type="radio" name="q1" id="q1a" value="menos6" />
-              <div class="opt-text"><strong>Menos de 6 meses</strong><span>Pode exigir análise adicional.</span></div>
-            </div>
-            <div class="option" tabindex="0" data-radio="q1b">
-              <input type="radio" name="q1" id="q1b" value="6a12" />
-              <div class="opt-text"><strong>Entre 6 meses e 1 ano</strong><span>Depende dos demais fatores.</span></div>
-            </div>
-            <div class="option" tabindex="0" data-radio="q1c">
-              <input type="radio" name="q1" id="q1c" value="mais1" />
-              <div class="opt-text"><strong>Mais de 1 ano ✅</strong><span>Excelente histórico.</span></div>
-            </div>
+            <div class="option" tabindex="0" data-radio="q1a"><input type="radio" name="q1" id="q1a" value="menos6"><div class="opt-text"><strong>Menos de 6 meses</strong><span>Pode exigir análise adicional.</span></div></div>
+            <div class="option" tabindex="0" data-radio="q1b"><input type="radio" name="q1" id="q1b" value="6a12"><div class="opt-text"><strong>Entre 6 meses e 1 ano</strong><span>Depende dos demais fatores.</span></div></div>
+            <div class="option" tabindex="0" data-radio="q1c"><input type="radio" name="q1" id="q1c" value="mais1"><div class="opt-text"><strong>Mais de 1 ano ✅</strong><span>Excelente histórico.</span></div></div>
           </div>
-          <div class="btnrow">
-            <button class="btn btn-primary" id="btnNext1" disabled>Próxima →</button>
-          </div>
+          <div class="btnrow"><button class="btn btn-primary" id="btnNext1" disabled>Próxima →</button></div>
         </div>
 
         <!-- Q2 -->
@@ -362,18 +241,9 @@
           <div class="question-title">2) Qual é o faturamento mensal médio da sua empresa?</div>
           <div class="question-help">Precisamos de um volume mínimo para viabilizar a operação.</div>
           <div class="options">
-            <div class="option" tabindex="0" data-radio="q2a">
-              <input type="radio" name="q2" id="q2a" value="menos30" />
-              <div class="opt-text"><strong>Menos de R$ 30.000</strong><span>Pode limitar o teto.</span></div>
-            </div>
-            <div class="option" tabindex="0" data-radio="q2b">
-              <input type="radio" name="q2" id="q2b" value="30a50" />
-              <div class="opt-text"><strong>Entre R$ 30.000 e R$ 50.000</strong><span>Faixa comum.</span></div>
-            </div>
-            <div class="option" tabindex="0" data-radio="q2c">
-              <input type="radio" name="q2" id="q2c" value="mais50" />
-              <div class="opt-text"><strong>Acima de R$ 50.000 ✅</strong><span>Melhor cenário.</span></div>
-            </div>
+            <div class="option" tabindex="0" data-radio="q2a"><input type="radio" name="q2" id="q2a" value="menos30"><div class="opt-text"><strong>Menos de R$ 30.000</strong><span>Pode limitar o teto.</span></div></div>
+            <div class="option" tabindex="0" data-radio="q2b"><input type="radio" name="q2" id="q2b" value="30a50"><div class="opt-text"><strong>Entre R$ 30.000 e R$ 50.000</strong><span>Faixa comum.</span></div></div>
+            <div class="option" tabindex="0" data-radio="q2c"><input type="radio" name="q2" id="q2c" value="mais50"><div class="opt-text"><strong>Acima de R$ 50.000 ✅</strong><span>Melhor cenário.</span></div></div>
           </div>
           <div class="btnrow">
             <button class="btn btn-secondary" id="btnBack2">← Voltar</button>
@@ -386,18 +256,9 @@
           <div class="question-title">3) Sua empresa possui certidões negativas válidas?</div>
           <div class="question-help">Federal, Estadual, Municipal, FGTS e Trabalhista.</div>
           <div class="options">
-            <div class="option" tabindex="0" data-radio="q3a">
-              <input type="radio" name="q3" id="q3a" value="sim" />
-              <div class="opt-text"><strong>Sim, todas em dia ✅</strong><span>Ótimo: reduz atritos.</span></div>
-            </div>
-            <div class="option" tabindex="0" data-radio="q3b">
-              <input type="radio" name="q3" id="q3b" value="naosei" />
-              <div class="opt-text"><strong>Não sei / Preciso verificar</strong><span>Podemos orientar.</span></div>
-            </div>
-            <div class="option" tabindex="0" data-radio="q3c">
-              <input type="radio" name="q3" id="q3c" value="nao" />
-              <div class="opt-text"><strong>Não, tenho pendências</strong><span>Geralmente precisa regularizar.</span></div>
-            </div>
+            <div class="option" tabindex="0" data-radio="q3a"><input type="radio" name="q3" id="q3a" value="sim"><div class="opt-text"><strong>Sim, todas em dia ✅</strong><span>Ótimo: reduz atritos.</span></div></div>
+            <div class="option" tabindex="0" data-radio="q3b"><input type="radio" name="q3" id="q3b" value="naosei"><div class="opt-text"><strong>Não sei / Preciso verificar</strong><span>Podemos orientar.</span></div></div>
+            <div class="option" tabindex="0" data-radio="q3c"><input type="radio" name="q3" id="q3c" value="nao"><div class="opt-text"><strong>Não, tenho pendências</strong><span>Geralmente precisa regularizar.</span></div></div>
           </div>
           <div class="btnrow">
             <button class="btn btn-secondary" id="btnBack3">← Voltar</button>
@@ -410,18 +271,9 @@
           <div class="question-title">4) Seus clientes (pagadores) são empresas estabelecidas?</div>
           <div class="question-help">Avaliamos a solidez de quem vai pagar as duplicatas.</div>
           <div class="options">
-            <div class="option" tabindex="0" data-radio="q4a">
-              <input type="radio" name="q4" id="q4a" value="sim" />
-              <div class="opt-text"><strong>Sim, empresas sólidas ✅</strong><span>Melhor cenário.</span></div>
-            </div>
-            <div class="option" tabindex="0" data-radio="q4b">
-              <input type="radio" name="q4" id="q4b" value="misto" />
-              <div class="opt-text"><strong>Misto</strong><span>Depende do mix.</span></div>
-            </div>
-            <div class="option" tabindex="0" data-radio="q4c">
-              <input type="radio" name="q4" id="q4c" value="nao" />
-              <div class="opt-text"><strong>Maioria pequena/informal</strong><span>Pode dificultar limites.</span></div>
-            </div>
+            <div class="option" tabindex="0" data-radio="q4a"><input type="radio" name="q4" id="q4a" value="sim"><div class="opt-text"><strong>Sim, empresas sólidas ✅</strong><span>Melhor cenário.</span></div></div>
+            <div class="option" tabindex="0" data-radio="q4b"><input type="radio" name="q4" id="q4b" value="misto"><div class="opt-text"><strong>Misto</strong><span>Depende do mix.</span></div></div>
+            <div class="option" tabindex="0" data-radio="q4c"><input type="radio" name="q4" id="q4c" value="nao"><div class="opt-text"><strong>Maioria pequena/informal</strong><span>Pode dificultar limites.</span></div></div>
           </div>
           <div class="btnrow">
             <button class="btn btn-secondary" id="btnBack4">← Voltar</button>
@@ -431,53 +283,50 @@
 
         <!-- FORM -->
         <div class="question-container" id="contactForm" data-step="5">
-          <div class="question-title">Última etapa: seus dados para liberar o resultado</div>
-          <div class="question-help">Ao enviar, você verá o resultado e poderá chamar no WhatsApp (wa.me).</div>
+          <div class="question-title">Última etapa: seus dados</div>
+          <div class="question-help">Ao enviar, você verá o resultado e poderá chamar no WhatsApp.</div>
 
           <div class="grid">
             <div class="field">
-              <label for="name">Nome completo *</label>
-              <input class="input" type="text" id="name" autocomplete="name" />
+              <label>Nome completo *</label>
+              <input class="input" id="name" type="text">
               <div class="error" id="errName">Informe seu nome.</div>
             </div>
             <div class="field">
-              <label for="company">Empresa *</label>
-              <input class="input" type="text" id="company" autocomplete="organization" />
-              <div class="error" id="errCompany">Informe o nome da empresa.</div>
+              <label>Empresa *</label>
+              <input class="input" id="company" type="text">
+              <div class="error" id="errCompany">Informe a empresa.</div>
             </div>
           </div>
 
           <div class="grid">
             <div class="field">
-              <label for="cnpj">CNPJ *</label>
-              <input class="input" type="text" id="cnpj" inputmode="numeric" placeholder="00.000.000/0000-00" />
+              <label>CNPJ *</label>
+              <input class="input" id="cnpj" type="text" inputmode="numeric" placeholder="00.000.000/0000-00">
               <div class="error" id="errCnpj">Informe um CNPJ válido.</div>
             </div>
             <div class="field">
-              <label for="email">E-mail *</label>
-              <input class="input" type="email" id="email" autocomplete="email" />
+              <label>E-mail *</label>
+              <input class="input" id="email" type="email">
               <div class="error" id="errEmail">Informe um e-mail válido.</div>
             </div>
           </div>
 
           <div class="grid">
             <div class="field">
-              <label for="phone">WhatsApp (com DDD) *</label>
-              <input class="input" type="tel" id="phone" inputmode="numeric" autocomplete="tel" />
+              <label>WhatsApp (DDD) *</label>
+              <input class="input" id="phone" type="tel" inputmode="numeric">
               <div class="error" id="errPhone">Informe um WhatsApp válido.</div>
             </div>
-            <div class="field" style="opacity:.95">
-              <label> </label>
+            <div class="field">
+              <label>&nbsp;</label>
               <div class="subtitle" style="margin:0">* Campos obrigatórios</div>
             </div>
           </div>
 
           <div class="lgpd">
             <input type="checkbox" id="lgpd" />
-            <p>
-              Eu concordo com o tratamento dos meus dados conforme a
-              <a id="policyLink" href="#" target="_blank" rel="noopener">Política de Privacidade</a>. *
-            </p>
+            <p>Eu concordo com a <a id="policyLink" href="#" target="_blank" rel="noopener">Política de Privacidade</a>. *</p>
           </div>
           <div class="error" id="errLgpd">Você precisa aceitar para continuar.</div>
 
@@ -493,250 +342,161 @@
       </div>
     </section>
 
-    <aside class="panel side" aria-label="Informações">
+    <aside class="panel side">
       <div class="panel-inner">
         <h3>O que você vai receber</h3>
-        <p>Um direcionamento imediato e, se fizer sentido, seguimos com análise dos recebíveis e pagadores.</p>
-
+        <p class="subtitle">Direcionamento imediato e, se fizer sentido, seguimos com análise dos recebíveis e pagadores.</p>
         <div class="cards">
-          <div class="mini">
-            <div class="ico">📌</div>
-            <div><strong>Resultado em 1 minuto</strong><span>Pré-aprovado / em análise / não elegível.</span></div>
-          </div>
-          <div class="mini">
-            <div class="ico ico2">📄</div>
-            <div><strong>Documentos comuns</strong><span>Contrato social, certidões, notas/duplicatas e pagadores.</span></div>
-          </div>
-          <div class="mini">
-            <div class="ico ico3">⏱️</div>
-            <div><strong>Tempo médio</strong><span>Resposta humana geralmente em até 24h.</span></div>
-          </div>
+          <div class="mini"><div class="ico">📌</div><div><strong>Resultado em 1 minuto</strong><span>Pré-aprovado / em análise / não elegível.</span></div></div>
+          <div class="mini"><div class="ico">📄</div><div><strong>Documentos comuns</strong><span>Contrato social, certidões, notas/duplicatas e pagadores.</span></div></div>
+          <div class="mini"><div class="ico">⏱️</div><div><strong>Tempo médio</strong><span>Resposta humana geralmente em até 24h.</span></div></div>
         </div>
       </div>
     </aside>
   </div>
 
   <script>
-    // ===== CONFIG =====
     const WHATSAPP = '5531988008600';
     const PRIVACY_POLICY_URL = 'https://SEU-DOMINIO.com/politica-de-privacidade';
-    const GOOGLE_SHEETS_WEBAPP_URL = 'https://script.google.com/macros/s/AKfycbx5aLOrrz_mFG8dt_fklclERm3_FVHQOlEV91O9ipbtjN3cicMRCu-nGXkL1wspe6iP/exec';
-    // ==================
+    const GOOGLE_SHEETS_WEBAPP_URL = 'https://script.google.com/macros/s/AKfycbyDdDzOFxZP8_Q_a6L4T7LsnogW68t5reWl31PhJqQ6SjOj8AFBZR1Ax_CEs5QoFxk/exec';
 
     let currentQuestion = 1;
     const answers = {};
     const totalSteps = 5;
 
-    function getParams(){
-      const url = new URL(window.location.href);
-      const o = {};
-      url.searchParams.forEach((v,k)=> o[k] = v);
-      return o;
-    }
-    function captureUtm(){
-      const p = getParams();
-      const utm = {
-        utm_source: p.utm_source || '',
-        utm_campaign: p.utm_campaign || '',
-        utm_medium: p.utm_medium || '',
-        utm_content: p.utm_content || '',
-        utm_term: p.utm_term || '',
-        gclid: p.gclid || '',
-        fbclid: p.fbclid || ''
-      };
-      localStorage.setItem('lp_utm', JSON.stringify(utm));
-      return utm;
-    }
-    function readUtm(){
-      try{
-        const s = localStorage.getItem('lp_utm');
-        if(s) return JSON.parse(s);
-      }catch(e){}
-      return captureUtm();
-    }
-
-    function setActive(idToShow){
-      document.querySelectorAll('.question-container').forEach(el => el.classList.remove('active'));
-      const el = document.getElementById(idToShow);
+    function setActive(id){
+      document.querySelectorAll('.question-container').forEach(el=>el.classList.remove('active'));
+      const el = document.getElementById(id);
       el.classList.add('active');
-      currentQuestion = Number(el.dataset.step || 1);
-      updateProgress();
-      updateStepText();
-    }
-    function updateProgress(){
-      const progress = Math.round((currentQuestion / totalSteps) * 100);
-      document.getElementById('progressBar').style.width = progress + '%';
-    }
-    function updateStepText(){
+      currentQuestion = Number(el.dataset.step||1);
+      document.getElementById('progressBar').style.width = Math.round((currentQuestion/totalSteps)*100)+'%';
       document.getElementById('stepText').textContent = `Etapa ${currentQuestion} de ${totalSteps}`;
-      document.getElementById('stepHint').textContent = currentQuestion <= 4 ? 'Selecione uma opção' : 'Preencha seus dados';
-    }
-    function firstName(full){
-      return (full || '').trim().split(/\s+/)[0] || 'Olá';
+      document.getElementById('stepHint').textContent = currentQuestion<=4 ? 'Selecione uma opção' : 'Preencha seus dados';
     }
 
     function wireOptionCards(){
-      document.querySelectorAll('.option').forEach(card => {
+      document.querySelectorAll('.option').forEach(card=>{
         const id = card.getAttribute('data-radio');
-        if(!id) return;
         const input = document.getElementById(id);
-
-        card.addEventListener('click', () => {
-          input.checked = true;
-          input.dispatchEvent(new Event('change', { bubbles: true }));
-        });
-
-        card.addEventListener('keydown', (e) => {
-          if(e.key === 'Enter' || e.key === ' '){
-            e.preventDefault();
-            input.checked = true;
-            input.dispatchEvent(new Event('change', { bubbles: true }));
-          }
-        });
+        card.addEventListener('click', ()=>{ input.checked=true; input.dispatchEvent(new Event('change',{bubbles:true})); });
       });
     }
 
-    function setNextEnabled(qNumber, enabled){
-      const btn = document.getElementById(`btnNext${qNumber}`) || (qNumber === 4 ? document.getElementById('btnToForm') : null);
+    function setNextEnabled(n, enabled){
+      const btn = document.getElementById(`btnNext${n}`) || (n===4?document.getElementById('btnToForm'):null);
       if(btn) btn.disabled = !enabled;
     }
 
     function watchRadios(){
-      [1,2,3,4].forEach(n => {
-        document.querySelectorAll(`input[name="q${n}"]`).forEach(r => {
-          r.addEventListener('change', () => {
+      [1,2,3,4].forEach(n=>{
+        document.querySelectorAll(`input[name="q${n}"]`).forEach(r=>{
+          r.addEventListener('change', ()=>{
             answers[`q${n}`] = document.querySelector(`input[name="q${n}"]:checked`)?.value;
-            setNextEnabled(n, true);
+            setNextEnabled(n,true);
           });
         });
       });
     }
 
-    function goNext(from){
-      if(!answers[`q${from}`]) return;
-      const nextMap = {1:'question2', 2:'question3', 3:'question4'};
-      setActive(nextMap[from]);
+    function scoreIt(){
+      let s=0;
+      if(answers.q1==='mais1') s+=3; else if(answers.q1==='6a12') s+=2;
+      if(answers.q2==='mais50') s+=3; else if(answers.q2==='30a50') s+=2;
+      if(answers.q3==='sim') s+=3; else if(answers.q3==='naosei') s+=1;
+      if(answers.q4==='sim') s+=3; else if(answers.q4==='misto') s+=2;
+      return s;
     }
-    function goBack(toId){ setActive(toId); }
-    function openForm(){ if(!answers.q4) return; setActive('contactForm'); }
+    function statusFromScore(s){ return s>=10?'PRE_APROVADO':(s>=6?'EM_ANALISE':'NAO_ELEGIVEL'); }
 
-    function validateEmail(v){
-      return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(v || '').trim());
-    }
-    function onlyDigits(v){ return String(v || '').replace(/\D/g,''); }
+    function onlyDigits(v){ return String(v||'').replace(/\D/g,''); }
+    function validateEmail(v){ return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(v||'').trim()); }
 
     function validateCnpj(raw){
       const cnpj = onlyDigits(raw);
-      if(cnpj.length !== 14) return false;
+      if(cnpj.length!==14) return false;
       if(/^(\d)\1+$/.test(cnpj)) return false;
-
-      const calc = (base) => {
-        let sum = 0;
-        let pos = base.length - 7;
-        for(let i = base.length; i >= 1; i--){
-          sum += Number(base.charAt(base.length - i)) * pos--;
-          if(pos < 2) pos = 9;
+      const calc=(base)=>{
+        let sum=0,pos=base.length-7;
+        for(let i=base.length;i>=1;i--){
+          sum += Number(base.charAt(base.length-i))*pos--;
+          if(pos<2) pos=9;
         }
-        const mod = sum % 11;
-        return (mod < 2) ? 0 : (11 - mod);
+        const mod=sum%11;
+        return (mod<2)?0:(11-mod);
       };
-
-      const base12 = cnpj.substring(0,12);
-      const d1 = calc(base12);
-      const base13 = cnpj.substring(0,13);
-      const d2 = calc(base13);
-
-      return cnpj.endsWith(String(d1) + String(d2));
+      const d1=calc(cnpj.substring(0,12));
+      const d2=calc(cnpj.substring(0,13));
+      return cnpj.endsWith(String(d1)+String(d2));
     }
-
     function maskCnpj(v){
-      v = onlyDigits(v).slice(0,14);
-      v = v.replace(/^(\d{2})(\d)/, '$1.$2');
-      v = v.replace(/^(\d{2})\.(\d{3})(\d)/, '$1.$2.$3');
-      v = v.replace(/\.(\d{3})(\d)/, '.$1/$2');
-      v = v.replace(/(\d{4})(\d)/, '$1-$2');
+      v=onlyDigits(v).slice(0,14);
+      v=v.replace(/^(\d{2})(\d)/,'$1.$2');
+      v=v.replace(/^(\d{2})\.(\d{3})(\d)/,'$1.$2.$3');
+      v=v.replace(/\.(\d{3})(\d)/,'.$1/$2');
+      v=v.replace(/(\d{4})(\d)/,'$1-$2');
       return v;
     }
-
     function phoneMask(v){
-      v = onlyDigits(v).slice(0, 11);
-      if(v.length <= 10){
-        return v.replace(/^(\d{2})(\d)/, '($1) $2').replace(/(\d{4})(\d{4})$/, '$1-$2');
-      }
-      return v.replace(/^(\d{2})(\d)/, '($1) $2').replace(/(\d{5})(\d{4})$/, '$1-$2');
+      v=onlyDigits(v).slice(0,11);
+      if(v.length<=10) return v.replace(/^(\d{2})(\d)/,'($1) $2').replace(/(\d{4})(\d{4})$/,'$1-$2');
+      return v.replace(/^(\d{2})(\d)/,'($1) $2').replace(/(\d{5})(\d{4})$/,'$1-$2');
     }
 
     function validateForm(){
-      const name = document.getElementById('name').value.trim();
-      const company = document.getElementById('company').value.trim();
-      const cnpjRaw = document.getElementById('cnpj').value.trim();
-      const email = document.getElementById('email').value.trim();
-      const phone = onlyDigits(document.getElementById('phone').value);
-      const lgpd = document.getElementById('lgpd').checked;
+      const name=document.getElementById('name').value.trim();
+      const company=document.getElementById('company').value.trim();
+      const cnpjRaw=document.getElementById('cnpj').value.trim();
+      const email=document.getElementById('email').value.trim();
+      const phone=onlyDigits(document.getElementById('phone').value);
+      const lgpd=document.getElementById('lgpd').checked;
 
-      const okName = name.length >= 3;
-      const okCompany = company.length >= 2;
-      const okEmail = validateEmail(email);
-      const okPhone = phone.length >= 10 && phone.length <= 11;
-      const okCnpj = validateCnpj(cnpjRaw);
-      const okLgpd = lgpd;
+      const okName=name.length>=3;
+      const okCompany=company.length>=2;
+      const okCnpj=validateCnpj(cnpjRaw);
+      const okEmail=validateEmail(email);
+      const okPhone=phone.length>=10 && phone.length<=11;
+      const okLgpd=lgpd;
 
-      document.getElementById('errName').classList.toggle('show', !okName);
-      document.getElementById('errCompany').classList.toggle('show', !okCompany);
-      document.getElementById('errEmail').classList.toggle('show', !okEmail);
-      document.getElementById('errPhone').classList.toggle('show', !okPhone);
-      document.getElementById('errCnpj').classList.toggle('show', !okCnpj);
-      document.getElementById('errLgpd').classList.toggle('show', !okLgpd);
+      document.getElementById('errName').classList.toggle('show',!okName);
+      document.getElementById('errCompany').classList.toggle('show',!okCompany);
+      document.getElementById('errCnpj').classList.toggle('show',!okCnpj);
+      document.getElementById('errEmail').classList.toggle('show',!okEmail);
+      document.getElementById('errPhone').classList.toggle('show',!okPhone);
+      document.getElementById('errLgpd').classList.toggle('show',!okLgpd);
 
-      return {
-        ok: okName && okCompany && okCnpj && okEmail && okPhone && okLgpd,
-        name,
-        company,
-        cnpj: onlyDigits(cnpjRaw),
-        email,
-        phone
+      return { ok: okName&&okCompany&&okCnpj&&okEmail&&okPhone&&okLgpd, name, company, cnpj: onlyDigits(cnpjRaw), email, phone };
+    }
+
+    function captureUtm(){
+      const url = new URL(window.location.href);
+      const utm = {
+        utm_source: url.searchParams.get('utm_source')||'',
+        utm_campaign: url.searchParams.get('utm_campaign')||'',
+        utm_medium: url.searchParams.get('utm_medium')||'',
+        utm_content: url.searchParams.get('utm_content')||'',
+        utm_term: url.searchParams.get('utm_term')||'',
+        gclid: url.searchParams.get('gclid')||'',
+        fbclid: url.searchParams.get('fbclid')||''
       };
+      localStorage.setItem('lp_utm', JSON.stringify(utm));
+      return utm;
+    }
+    function readUtm(){
+      try{ const s=localStorage.getItem('lp_utm'); if(s) return JSON.parse(s); }catch(e){}
+      return captureUtm();
     }
 
-    function scoreIt(){
-      let score = 0;
-      if (answers.q1 === 'mais1') score += 3;
-      else if (answers.q1 === '6a12') score += 2;
-
-      if (answers.q2 === 'mais50') score += 3;
-      else if (answers.q2 === '30a50') score += 2;
-
-      if (answers.q3 === 'sim') score += 3;
-      else if (answers.q3 === 'naosei') score += 1;
-
-      if (answers.q4 === 'sim') score += 3;
-      else if (answers.q4 === 'misto') score += 2;
-
-      return score;
-    }
-
-    function statusFromScore(score){
-      if(score >= 10) return "PRE_APROVADO";
-      if(score >= 6) return "EM_ANALISE";
-      return "NAO_ELEGIVEL";
-    }
-
+    // ✅ ENVIO MAIS CONFIÁVEL: form-urlencoded (payload=JSON)
     function sendToGoogleSheets(payload){
-      // Melhor para iOS/Android: sendBeacon
       try{
-        if (navigator.sendBeacon) {
-          const blob = new Blob([JSON.stringify(payload)], { type: 'application/json' });
-          return navigator.sendBeacon(GOOGLE_SHEETS_WEBAPP_URL, blob);
-        }
-      }catch(e){}
+        const body = new URLSearchParams();
+        body.set('payload', JSON.stringify(payload));
 
-      // Fallback: fetch
-      try{
         fetch(GOOGLE_SHEETS_WEBAPP_URL, {
           method: 'POST',
           mode: 'no-cors',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload),
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8' },
+          body: body.toString(),
           keepalive: true
         });
         return true;
@@ -746,62 +506,22 @@
     }
 
     function renderResult(score, lead){
-      document.getElementById('contactForm').classList.remove('active');
       const result = document.getElementById('resultContainer');
       result.classList.add('active');
 
-      currentQuestion = 5;
-      updateProgress();
-      updateStepText();
-
-      let tagClass = 'warn';
-      let tagText = 'EM ANÁLISE';
-      let emoji = '⚠️';
-      let title = `${firstName(lead.name)}, precisamos de mais informações`;
-      let desc = `Sua empresa <strong>${lead.company}</strong> pode se enquadrar, mas precisamos avaliar alguns detalhes.`;
-
-      if(score >= 10){
-        tagClass = 'ok';
-        tagText = 'PRÉ-APROVADO';
-        emoji = '🎉';
-        title = `Parabéns, ${firstName(lead.name)}!`;
-        desc = `Sua empresa <strong>${lead.company}</strong> está <strong>PRÉ-APROVADA</strong> para antecipação de recebíveis.`;
-      } else if(score < 6){
-        tagClass = 'bad';
-        tagText = 'NÃO ELEGÍVEL AGORA';
-        emoji = '😕';
-        title = `${firstName(lead.name)}, ainda não é o momento ideal`;
-        desc = `Com base nas informações, sua empresa ainda não atende aos critérios mínimos para antecipação no momento.`;
-      }
+      const status = statusFromScore(score);
+      const tag = status==='PRE_APROVADO'?'PRÉ-APROVADO':(status==='EM_ANALISE'?'EM ANÁLISE':'NÃO ELEGÍVEL');
+      const title = status==='PRE_APROVADO' ? 'Parabéns!' : (status==='EM_ANALISE'?'Precisamos de mais informações':'Ainda não é o momento ideal');
 
       const waMsg =
-        `Olá! Quero antecipar meus recebíveis.\n\n` +
-        `Nome: ${lead.name}\n` +
-        `Empresa: ${lead.company}\n` +
-        `CNPJ: ${lead.cnpj}\n` +
-        `E-mail: ${lead.email}`;
+        `Olá! Quero antecipar meus recebíveis.\n\n`+
+        `Nome: ${lead.name}\nEmpresa: ${lead.company}\nCNPJ: ${lead.cnpj}\nE-mail: ${lead.email}`;
 
       const waLink = `https://wa.me/${WHATSAPP}?text=${encodeURIComponent(waMsg)}`;
 
       result.innerHTML = `
-        <div class="result-top">
-          <div class="emoji">${emoji}</div>
-          <div>
-            <h2>${title}</h2>
-            <div class="tag ${tagClass}">${tagText}</div>
-          </div>
-        </div>
-        <p class="subtitle">${desc}</p>
-
-        <div class="box">
-          <h3>✅ Próximo passo</h3>
-          <ul>
-            <li>Clique no botão abaixo para falar no WhatsApp</li>
-            <li>Nosso time orienta documentos e recebíveis</li>
-            <li>Você recebe a proposta conforme seu perfil</li>
-          </ul>
-        </div>
-
+        <div class="question-title">${title}</div>
+        <div class="subtitle"><strong>${tag}</strong></div>
         <div class="cta">
           <div>
             <strong>Falar no WhatsApp</strong><br/>
@@ -812,49 +532,38 @@
       `;
     }
 
-    document.addEventListener('DOMContentLoaded', () => {
+    document.addEventListener('DOMContentLoaded', ()=>{
       document.getElementById('policyLink').href = PRIVACY_POLICY_URL;
-
       captureUtm();
       wireOptionCards();
       watchRadios();
-      updateProgress();
-      updateStepText();
+      setActive('question1');
 
-      document.getElementById('btnNext1').addEventListener('click', () => goNext(1));
-      document.getElementById('btnNext2').addEventListener('click', () => goNext(2));
-      document.getElementById('btnNext3').addEventListener('click', () => goNext(3));
+      document.getElementById('btnNext1').onclick=()=>setActive('question2');
+      document.getElementById('btnBack2').onclick=()=>setActive('question1');
+      document.getElementById('btnNext2').onclick=()=>setActive('question3');
+      document.getElementById('btnBack3').onclick=()=>setActive('question2');
+      document.getElementById('btnNext3').onclick=()=>setActive('question4');
+      document.getElementById('btnBack4').onclick=()=>setActive('question3');
 
-      document.getElementById('btnBack2').addEventListener('click', () => goBack('question1'));
-      document.getElementById('btnBack3').addEventListener('click', () => goBack('question2'));
-      document.getElementById('btnBack4').addEventListener('click', () => goBack('question3'));
+      document.getElementById('btnToForm').onclick=()=>setActive('contactForm');
+      document.getElementById('btnBackForm').onclick=()=>setActive('question4');
 
-      document.getElementById('btnToForm').addEventListener('click', openForm);
-      document.getElementById('btnBackForm').addEventListener('click', () => goBack('question4'));
+      document.getElementById('cnpj').addEventListener('input', e=>e.target.value=maskCnpj(e.target.value));
+      document.getElementById('phone').addEventListener('input', e=>e.target.value=phoneMask(e.target.value));
 
-      document.getElementById('phone').addEventListener('input', (e) => e.target.value = phoneMask(e.target.value));
-      document.getElementById('cnpj').addEventListener('input', (e) => e.target.value = maskCnpj(e.target.value));
-
-      document.getElementById('btnShowResult').addEventListener('click', () => {
-        const formNote = document.getElementById('formNote');
-        formNote.textContent = '';
-
+      document.getElementById('btnShowResult').addEventListener('click', ()=>{
         const lead = validateForm();
-        if(!lead.ok){
-          formNote.textContent = 'Revise os campos destacados acima.';
-          return;
-        }
+        if(!lead.ok) return;
 
         const score = scoreIt();
-        const status = statusFromScore(score);
         const utm = readUtm();
-
         const payload = {
           timestamp: new Date().toISOString(),
           page_url: window.location.href,
           referrer: document.referrer || '',
           score,
-          status,
+          status: statusFromScore(score),
           name: lead.name,
           company: lead.company,
           cnpj: lead.cnpj,
@@ -866,10 +575,11 @@
           utm
         };
 
-        // Opção B: envia para o Sheets AGORA
+        // Opção B: grava agora
         sendToGoogleSheets(payload);
 
-        // Mostra resultado
+        // mostra resultado
+        document.getElementById('contactForm').classList.remove('active');
         renderResult(score, lead);
       });
     });
