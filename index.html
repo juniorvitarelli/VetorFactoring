@@ -39,7 +39,19 @@
       grid-template-columns: 1.05fr .95fr;
       gap: 18px;
     }
-    @media (max-width: 860px){ .wrap{ grid-template-columns: 1fr; } }
+
+    /* Mobile: vira 1 coluna e o painel da direita fica embaixo */
+    @media (max-width: 860px){
+      .wrap{ grid-template-columns: 1fr; }
+      aside.panel.side{ order: 2; }
+      section.panel{ order: 1; }
+    }
+
+    @media (max-width: 520px){
+      body { padding: 14px; }
+      .panel-inner { padding: 18px; }
+      .title{ font-size: 22px; }
+    }
 
     .panel{
       background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
@@ -169,11 +181,7 @@
     }
     .btn-secondary{ background: rgba(0,0,0,.18); }
 
-    /* Sidebar */
-    .side h3{ font-size: 15px; margin-bottom: 10px; letter-spacing: -0.01em; }
-    .side p{ color: var(--muted); font-size: 13px; line-height: 1.55; margin-bottom: 12px; }
     .cards{ display:grid; gap:10px; margin-top:10px; }
-
     .mini{
       border: 1px solid var(--border);
       background: rgba(255,255,255,.03);
@@ -196,7 +204,6 @@
     .mini strong{ display:block; font-size: 13px; margin-bottom: 2px; }
     .mini span{ color: var(--muted); font-size: 12.5px; line-height:1.45; }
 
-    /* Form */
     .grid{ display:grid; grid-template-columns: 1fr 1fr; gap: 10px; }
     @media (max-width: 520px){ .grid{ grid-template-columns: 1fr; } }
 
@@ -219,7 +226,6 @@
     .error{ color:#fecaca; font-size:12px; margin-top:6px; display:none; }
     .error.show{ display:block; }
 
-    /* LGPD */
     .lgpd{
       margin-top: 12px;
       border: 1px solid var(--border);
@@ -234,7 +240,6 @@
     .lgpd p{ color: var(--muted); font-size: 12.5px; line-height: 1.45; margin: 0; }
     .lgpd a{ color: #c4b5fd; text-decoration: underline; }
 
-    /* Result */
     .result{ display:none; }
     .result.active{ display:block; animation: fadeUp .25s ease; }
 
@@ -307,33 +312,22 @@
       white-space: nowrap;
     }
     .cta a:hover{ transform: translateY(-1px); }
-
-    .smallnote{ margin-top: 10px; color: var(--muted); font-size: 12.5px; line-height: 1.5; }
-
-    /* Mobile: evita corte e deixa só 1 coluna */
-    @media (max-width: 520px){
-      body { padding: 14px; }
-      .panel-inner { padding: 18px; }
-      aside.panel.side { display:none; }
-      .title{ font-size: 22px; }
-    }
   </style>
 </head>
 
 <body>
   <div class="wrap">
-    <!-- MAIN -->
     <section class="panel" aria-label="Pré-qualificação">
       <div class="brandbar">
-        <div class="pill" title="Tempo estimado">⏱️ 60 segundos</div>
-        <div class="pill" title="Privacidade">🔒 Seus dados são protegidos</div>
+        <div class="pill">⏱️ 60 segundos</div>
+        <div class="pill">🔒 Seus dados são protegidos</div>
       </div>
 
       <div class="panel-inner">
         <h1 class="title">Descubra em 60 segundos se sua empresa está pré-aprovada</h1>
         <p class="subtitle">Responda 4 perguntas rápidas e receba um direcionamento imediato sobre antecipação de recebíveis (sem compromisso).</p>
 
-        <div class="progress" aria-label="Progresso"><div id="progressBar"></div></div>
+        <div class="progress"><div id="progressBar"></div></div>
 
         <div class="stephead">
           <div class="step" id="stepText">Etapa 1 de 5</div>
@@ -344,8 +338,7 @@
         <div class="question-container active" id="question1" data-step="1">
           <div class="question-title">1) Há quanto tempo sua empresa está em operação?</div>
           <div class="question-help">Precisamos de empresas com histórico mínimo de atividade.</div>
-
-          <div class="options" role="radiogroup" aria-label="Tempo de operação">
+          <div class="options">
             <div class="option" tabindex="0" data-radio="q1a">
               <input type="radio" name="q1" id="q1a" value="menos6" />
               <div class="opt-text"><strong>Menos de 6 meses</strong><span>Pode exigir análise adicional.</span></div>
@@ -359,7 +352,6 @@
               <div class="opt-text"><strong>Mais de 1 ano ✅</strong><span>Excelente histórico.</span></div>
             </div>
           </div>
-
           <div class="btnrow">
             <button class="btn btn-primary" id="btnNext1" disabled>Próxima →</button>
           </div>
@@ -369,8 +361,7 @@
         <div class="question-container" id="question2" data-step="2">
           <div class="question-title">2) Qual é o faturamento mensal médio da sua empresa?</div>
           <div class="question-help">Precisamos de um volume mínimo para viabilizar a operação.</div>
-
-          <div class="options" role="radiogroup" aria-label="Faturamento mensal">
+          <div class="options">
             <div class="option" tabindex="0" data-radio="q2a">
               <input type="radio" name="q2" id="q2a" value="menos30" />
               <div class="opt-text"><strong>Menos de R$ 30.000</strong><span>Pode limitar o teto.</span></div>
@@ -384,7 +375,6 @@
               <div class="opt-text"><strong>Acima de R$ 50.000 ✅</strong><span>Melhor cenário.</span></div>
             </div>
           </div>
-
           <div class="btnrow">
             <button class="btn btn-secondary" id="btnBack2">← Voltar</button>
             <button class="btn btn-primary" id="btnNext2" disabled>Próxima →</button>
@@ -395,8 +385,7 @@
         <div class="question-container" id="question3" data-step="3">
           <div class="question-title">3) Sua empresa possui certidões negativas válidas?</div>
           <div class="question-help">Federal, Estadual, Municipal, FGTS e Trabalhista.</div>
-
-          <div class="options" role="radiogroup" aria-label="Certidões">
+          <div class="options">
             <div class="option" tabindex="0" data-radio="q3a">
               <input type="radio" name="q3" id="q3a" value="sim" />
               <div class="opt-text"><strong>Sim, todas em dia ✅</strong><span>Ótimo: reduz atritos.</span></div>
@@ -410,7 +399,6 @@
               <div class="opt-text"><strong>Não, tenho pendências</strong><span>Geralmente precisa regularizar.</span></div>
             </div>
           </div>
-
           <div class="btnrow">
             <button class="btn btn-secondary" id="btnBack3">← Voltar</button>
             <button class="btn btn-primary" id="btnNext3" disabled>Próxima →</button>
@@ -421,8 +409,7 @@
         <div class="question-container" id="question4" data-step="4">
           <div class="question-title">4) Seus clientes (pagadores) são empresas estabelecidas?</div>
           <div class="question-help">Avaliamos a solidez de quem vai pagar as duplicatas.</div>
-
-          <div class="options" role="radiogroup" aria-label="Clientes">
+          <div class="options">
             <div class="option" tabindex="0" data-radio="q4a">
               <input type="radio" name="q4" id="q4a" value="sim" />
               <div class="opt-text"><strong>Sim, empresas sólidas ✅</strong><span>Melhor cenário.</span></div>
@@ -436,7 +423,6 @@
               <div class="opt-text"><strong>Maioria pequena/informal</strong><span>Pode dificultar limites.</span></div>
             </div>
           </div>
-
           <div class="btnrow">
             <button class="btn btn-secondary" id="btnBack4">← Voltar</button>
             <button class="btn btn-primary" id="btnToForm" disabled>Ver resultado →</button>
@@ -451,12 +437,12 @@
           <div class="grid">
             <div class="field">
               <label for="name">Nome completo *</label>
-              <input class="input" type="text" id="name" autocomplete="name" placeholder="Ex: José Vitarelli" />
+              <input class="input" type="text" id="name" autocomplete="name" />
               <div class="error" id="errName">Informe seu nome.</div>
             </div>
             <div class="field">
               <label for="company">Empresa *</label>
-              <input class="input" type="text" id="company" autocomplete="organization" placeholder="Ex: Minha Empresa LTDA" />
+              <input class="input" type="text" id="company" autocomplete="organization" />
               <div class="error" id="errCompany">Informe o nome da empresa.</div>
             </div>
           </div>
@@ -469,7 +455,7 @@
             </div>
             <div class="field">
               <label for="email">E-mail *</label>
-              <input class="input" type="email" id="email" autocomplete="email" placeholder="voce@empresa.com" />
+              <input class="input" type="email" id="email" autocomplete="email" />
               <div class="error" id="errEmail">Informe um e-mail válido.</div>
             </div>
           </div>
@@ -477,7 +463,7 @@
           <div class="grid">
             <div class="field">
               <label for="phone">WhatsApp (com DDD) *</label>
-              <input class="input" type="tel" id="phone" inputmode="numeric" autocomplete="tel" placeholder="(31) 98800-8600" />
+              <input class="input" type="tel" id="phone" inputmode="numeric" autocomplete="tel" />
               <div class="error" id="errPhone">Informe um WhatsApp válido.</div>
             </div>
             <div class="field" style="opacity:.95">
@@ -489,27 +475,24 @@
           <div class="lgpd">
             <input type="checkbox" id="lgpd" />
             <p>
-              Eu concordo com o tratamento dos meus dados para fins de contato e análise, conforme a
-              <a id="policyLink" href="#" target="_blank" rel="noopener">Política de Privacidade</a>.
-              *
+              Eu concordo com o tratamento dos meus dados conforme a
+              <a id="policyLink" href="#" target="_blank" rel="noopener">Política de Privacidade</a>. *
             </p>
           </div>
-          <div class="error" id="errLgpd">Você precisa aceitar a Política de Privacidade para continuar.</div>
+          <div class="error" id="errLgpd">Você precisa aceitar para continuar.</div>
 
           <div class="btnrow">
             <button class="btn btn-secondary" id="btnBackForm">← Voltar</button>
             <button class="btn btn-primary" id="btnShowResult">🎯 Ver meu resultado</button>
           </div>
 
-          <div class="smallnote" id="formNote" aria-live="polite"></div>
+          <div class="subtitle" id="formNote" style="margin-top:10px;"></div>
         </div>
 
-        <!-- RESULTADO -->
-        <div class="result" id="resultContainer" aria-live="polite"></div>
+        <div class="result" id="resultContainer"></div>
       </div>
     </section>
 
-    <!-- SIDE -->
     <aside class="panel side" aria-label="Informações">
       <div class="panel-inner">
         <h3>O que você vai receber</h3>
@@ -518,52 +501,30 @@
         <div class="cards">
           <div class="mini">
             <div class="ico">📌</div>
-            <div>
-              <strong>Resultado em 1 minuto</strong>
-              <span>Pré-aprovado / em análise / não elegível agora.</span>
-            </div>
+            <div><strong>Resultado em 1 minuto</strong><span>Pré-aprovado / em análise / não elegível.</span></div>
           </div>
-
           <div class="mini">
             <div class="ico ico2">📄</div>
-            <div>
-              <strong>Documentos comuns</strong>
-              <span>Contrato social, certidões, notas/duplicatas e dados dos pagadores.</span>
-            </div>
+            <div><strong>Documentos comuns</strong><span>Contrato social, certidões, notas/duplicatas e pagadores.</span></div>
           </div>
-
           <div class="mini">
             <div class="ico ico3">⏱️</div>
-            <div>
-              <strong>Tempo médio</strong>
-              <span>Resposta humana geralmente em até 24h (depende da documentação).</span>
-            </div>
+            <div><strong>Tempo médio</strong><span>Resposta humana geralmente em até 24h.</span></div>
           </div>
-        </div>
-
-        <div class="box" style="margin-top: 14px;">
-          <h3>Privacidade</h3>
-          <ul>
-            <li>Você só envia se aceitar a Política de Privacidade.</li>
-            <li>Seu contato é feito por WhatsApp via wa.me.</li>
-          </ul>
         </div>
       </div>
     </aside>
   </div>
 
   <script>
-    // ====== CONFIG ======
     const WHATSAPP = '5531988008600';
     const PRIVACY_POLICY_URL = 'https://SEU-DOMINIO.com/politica-de-privacidade';
     const GOOGLE_SHEETS_WEBAPP_URL = 'https://script.google.com/macros/s/AKfycbwJ-4UxfduN_nisIt1KLIaOV68LzJUm0-sVIX7EMsQADPNq-WoBtj9BdQlLxCulHqrI/exec';
-    // ====================
 
     let currentQuestion = 1;
     const answers = {};
     const totalSteps = 5;
 
-    // --- UTM capture ---
     function getParams(){
       const url = new URL(window.location.href);
       const o = {};
@@ -592,7 +553,6 @@
       return captureUtm();
     }
 
-    // --- UI helpers ---
     function setActive(idToShow){
       document.querySelectorAll('.question-container').forEach(el => el.classList.remove('active'));
       const el = document.getElementById(idToShow);
@@ -613,7 +573,6 @@
       return (full || '').trim().split(/\s+/)[0] || 'Olá';
     }
 
-    // clique no card seleciona o radio
     function wireOptionCards(){
       document.querySelectorAll('.option').forEach(card => {
         const id = card.getAttribute('data-radio');
@@ -642,8 +601,7 @@
 
     function watchRadios(){
       [1,2,3,4].forEach(n => {
-        const radios = document.querySelectorAll(`input[name="q${n}"]`);
-        radios.forEach(r => {
+        document.querySelectorAll(`input[name="q${n}"]`).forEach(r => {
           r.addEventListener('change', () => {
             answers[`q${n}`] = document.querySelector(`input[name="q${n}"]:checked`)?.value;
             setNextEnabled(n, true);
@@ -660,7 +618,6 @@
     function goBack(toId){ setActive(toId); }
     function openForm(){ if(!answers.q4) return; setActive('contactForm'); }
 
-    // --- Validation & scoring ---
     function validateEmail(v){
       return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(v || '').trim());
     }
@@ -699,6 +656,14 @@
       return v;
     }
 
+    function phoneMask(v){
+      v = onlyDigits(v).slice(0, 11);
+      if(v.length <= 10){
+        return v.replace(/^(\d{2})(\d)/, '($1) $2').replace(/(\d{4})(\d{4})$/, '$1-$2');
+      }
+      return v.replace(/^(\d{2})(\d)/, '($1) $2').replace(/(\d{5})(\d{4})$/, '$1-$2');
+    }
+
     function validateForm(){
       const name = document.getElementById('name').value.trim();
       const company = document.getElementById('company').value.trim();
@@ -723,11 +688,7 @@
 
       return {
         ok: okName && okCompany && okCnpj && okEmail && okPhone && okLgpd,
-        name,
-        company,
-        cnpj: onlyDigits(cnpjRaw),
-        email,
-        phone
+        name, company, cnpj: onlyDigits(cnpjRaw), email, phone
       };
     }
 
@@ -754,15 +715,29 @@
       return "NAO_ELEGIVEL";
     }
 
-    function phoneMask(v){
-      v = onlyDigits(v).slice(0, 11);
-      if(v.length <= 10){
-        return v.replace(/^(\d{2})(\d)/, '($1) $2').replace(/(\d{4})(\d{4})$/, '$1-$2');
+    function sendToGoogleSheets(payload){
+      try{
+        if (navigator.sendBeacon) {
+          const blob = new Blob([JSON.stringify(payload)], { type: 'application/json' });
+          return navigator.sendBeacon(GOOGLE_SHEETS_WEBAPP_URL, blob);
+        }
+      }catch(e){}
+
+      try{
+        fetch(GOOGLE_SHEETS_WEBAPP_URL, {
+          method: 'POST',
+          mode: 'no-cors',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload),
+          keepalive: true
+        });
+        return true;
+      }catch(e){
+        return false;
       }
-      return v.replace(/^(\d{2})(\d)/, '($1) $2').replace(/(\d{5})(\d{4})$/, '$1-$2');
     }
 
-    function showResult(score, lead){
+    function renderResult(score, lead){
       document.getElementById('contactForm').classList.remove('active');
       const result = document.getElementById('resultContainer');
       result.classList.add('active');
@@ -791,14 +766,9 @@
         desc = `Com base nas informações, sua empresa ainda não atende aos critérios mínimos para antecipação no momento.`;
       }
 
-      // WhatsApp: nome, empresa, cnpj, email, telefone
       const waMsg =
         `Olá! Quero antecipar meus recebíveis.\n\n` +
-        `Nome: ${lead.name}\n` +
-        `Empresa: ${lead.company}\n` +
-        `CNPJ: ${lead.cnpj}\n` +
-        `E-mail: ${lead.email}\n` +
-        `Telefone: ${lead.phone}`;
+        `Nome: ${lead.name}\nEmpresa: ${lead.company}\nCNPJ: ${lead.cnpj}\nE-mail: ${lead.email}`;
 
       const waLink = `https://wa.me/${WHATSAPP}?text=${encodeURIComponent(waMsg)}`;
 
@@ -810,57 +780,28 @@
             <div class="tag ${tagClass}">${tagText}</div>
           </div>
         </div>
-
         <p class="subtitle">${desc}</p>
-
         <div class="box">
           <h3>✅ Próximo passo</h3>
           <ul>
             <li>Clique no botão abaixo para falar no WhatsApp</li>
-            <li>Nosso time vai orientar nos documentos e recebíveis</li>
+            <li>Nosso time orienta documentos e recebíveis</li>
             <li>Você recebe a proposta conforme seu perfil</li>
           </ul>
         </div>
-
         <div class="cta">
           <div>
             <strong>Falar no WhatsApp</strong><br/>
-            <span class="subtitle" style="margin:0;">Envia seus dados (nome, empresa, CNPJ, e-mail e telefone).</span>
+            <span class="subtitle" style="margin:0;">Envia nome, empresa, CNPJ e e-mail.</span>
           </div>
           <a href="${waLink}" target="_blank" rel="noopener">📱 WhatsApp</a>
         </div>
-
-        <div class="smallnote" id="sendNote">Registrando seus dados...</div>
       `;
-    }
-
-    function sendToGoogleSheets(payload){
-      try{
-        if (navigator.sendBeacon) {
-          const blob = new Blob([JSON.stringify(payload)], { type: 'application/json' });
-          const ok = navigator.sendBeacon(GOOGLE_SHEETS_WEBAPP_URL, blob);
-          return ok;
-        }
-      }catch(e){}
-
-      try{
-        fetch(GOOGLE_SHEETS_WEBAPP_URL, {
-          method: 'POST',
-          mode: 'no-cors',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload),
-          keepalive: true
-        });
-        return true;
-      }catch(e){
-        return false;
-      }
     }
 
     document.addEventListener('DOMContentLoaded', () => {
       document.getElementById('policyLink').href = PRIVACY_POLICY_URL;
       captureUtm();
-
       wireOptionCards();
       watchRadios();
       updateProgress();
@@ -877,21 +818,16 @@
       document.getElementById('btnToForm').addEventListener('click', openForm);
       document.getElementById('btnBackForm').addEventListener('click', () => goBack('question4'));
 
-      document.getElementById('phone').addEventListener('input', (e) => {
-        e.target.value = phoneMask(e.target.value);
-      });
-
-      document.getElementById('cnpj').addEventListener('input', (e) => {
-        e.target.value = maskCnpj(e.target.value);
-      });
+      document.getElementById('phone').addEventListener('input', (e) => e.target.value = phoneMask(e.target.value));
+      document.getElementById('cnpj').addEventListener('input', (e) => e.target.value = maskCnpj(e.target.value));
 
       document.getElementById('btnShowResult').addEventListener('click', () => {
-        const note = document.getElementById('formNote');
-        note.textContent = '';
+        const formNote = document.getElementById('formNote');
+        formNote.textContent = '';
 
-        const v = validateForm();
-        if(!v.ok){
-          note.textContent = 'Revise os campos destacados acima.';
+        const lead = validateForm();
+        if(!lead.ok){
+          formNote.textContent = 'Revise os campos destacados acima.';
           return;
         }
 
@@ -903,27 +839,23 @@
           timestamp: new Date().toISOString(),
           page_url: window.location.href,
           referrer: document.referrer || '',
-          score,
-          status,
-          name: v.name,
-          company: v.company,
-          cnpj: v.cnpj,
-          email: v.email,
-          phone: v.phone,
+          score, status,
+          name: lead.name,
+          email: lead.email,
+          phone: lead.phone,
+          company: lead.company,
+          cnpj: lead.cnpj,
           lgpd_consent: true,
           privacy_policy_url: PRIVACY_POLICY_URL,
           answers: { ...answers },
           utm
         };
 
-        showResult(score, v);
+        // Opção B: grava no Sheets agora
+        sendToGoogleSheets(payload);
 
-        const ok = sendToGoogleSheets(payload);
-        setTimeout(() => {
-          const sn = document.getElementById('sendNote');
-          if(!sn) return;
-          sn.textContent = ok ? "✅ Dados registrados (envio disparado)." : "⚠️ Não foi possível disparar o envio (verifique o Web App).";
-        }, 300);
+        // mostra resultado
+        renderResult(score, lead);
       });
     });
   </script>
