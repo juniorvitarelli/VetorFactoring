@@ -309,6 +309,14 @@
     .cta a:hover{ transform: translateY(-1px); }
 
     .smallnote{ margin-top: 10px; color: var(--muted); font-size: 12.5px; line-height: 1.5; }
+
+    /* Mobile: evita corte e deixa só 1 coluna */
+    @media (max-width: 520px){
+      body { padding: 14px; }
+      .panel-inner { padding: 18px; }
+      aside.panel.side { display:none; }
+      .title{ font-size: 22px; }
+    }
   </style>
 </head>
 
@@ -435,7 +443,7 @@
           </div>
         </div>
 
-        <!-- FORM (com CNPJ) -->
+        <!-- FORM -->
         <div class="question-container" id="contactForm" data-step="5">
           <div class="question-title">Última etapa: seus dados para liberar o resultado</div>
           <div class="question-help">Ao enviar, você verá o resultado e poderá chamar no WhatsApp (wa.me).</div>
@@ -694,7 +702,7 @@
     function validateForm(){
       const name = document.getElementById('name').value.trim();
       const company = document.getElementById('company').value.trim();
-      const cnpj = document.getElementById('cnpj').value.trim();
+      const cnpjRaw = document.getElementById('cnpj').value.trim();
       const email = document.getElementById('email').value.trim();
       const phone = onlyDigits(document.getElementById('phone').value);
       const lgpd = document.getElementById('lgpd').checked;
@@ -703,7 +711,7 @@
       const okCompany = company.length >= 2;
       const okEmail = validateEmail(email);
       const okPhone = phone.length >= 10 && phone.length <= 11;
-      const okCnpj = validateCnpj(cnpj);
+      const okCnpj = validateCnpj(cnpjRaw);
       const okLgpd = lgpd;
 
       document.getElementById('errName').classList.toggle('show', !okName);
@@ -715,7 +723,11 @@
 
       return {
         ok: okName && okCompany && okCnpj && okEmail && okPhone && okLgpd,
-        name, company, cnpj: onlyDigits(cnpj), email, phone, lgpd
+        name,
+        company,
+        cnpj: onlyDigits(cnpjRaw),
+        email,
+        phone
       };
     }
 
@@ -750,8 +762,7 @@
       return v.replace(/^(\d{2})(\d)/, '($1) $2').replace(/(\d{5})(\d{4})$/, '$1-$2');
     }
 
-    // --- Result UI ---
-    function showResult(score, name, company, email){
+    function showResult(score, lead){
       document.getElementById('contactForm').classList.remove('active');
       const result = document.getElementById('resultContainer');
       result.classList.add('active');
@@ -763,25 +774,32 @@
       let tagClass = 'warn';
       let tagText = 'EM ANÁLISE';
       let emoji = '⚠️';
-      let title = `${firstName(name)}, precisamos de mais informações`;
-      let desc = `Sua empresa <strong>${company}</strong> pode se enquadrar, mas precisamos avaliar alguns detalhes.`;
+      let title = `${firstName(lead.name)}, precisamos de mais informações`;
+      let desc = `Sua empresa <strong>${lead.company}</strong> pode se enquadrar, mas precisamos avaliar alguns detalhes.`;
 
       if(score >= 10){
         tagClass = 'ok';
         tagText = 'PRÉ-APROVADO';
         emoji = '🎉';
-        title = `Parabéns, ${firstName(name)}!`;
-        desc = `Sua empresa <strong>${company}</strong> está <strong>PRÉ-APROVADA</strong> para antecipação de recebíveis.`;
+        title = `Parabéns, ${firstName(lead.name)}!`;
+        desc = `Sua empresa <strong>${lead.company}</strong> está <strong>PRÉ-APROVADA</strong> para antecipação de recebíveis.`;
       } else if(score < 6){
         tagClass = 'bad';
         tagText = 'NÃO ELEGÍVEL AGORA';
         emoji = '😕';
-        title = `${firstName(name)}, ainda não é o momento ideal`;
+        title = `${firstName(lead.name)}, ainda não é o momento ideal`;
         desc = `Com base nas informações, sua empresa ainda não atende aos critérios mínimos para antecipação no momento.`;
       }
 
-      // mensagem curta (como você pediu)
-      const waMsg = `Olá! Quero antecipar meus recebíveis. Meu nome é ${name}, empresa ${company}, e-mail ${email}.`;
+      // WhatsApp: nome, empresa, cnpj, email, telefone
+      const waMsg =
+        `Olá! Quero antecipar meus recebíveis.\n\n` +
+        `Nome: ${lead.name}\n` +
+        `Empresa: ${lead.company}\n` +
+        `CNPJ: ${lead.cnpj}\n` +
+        `E-mail: ${lead.email}\n` +
+        `Telefone: ${lead.phone}`;
+
       const waLink = `https://wa.me/${WHATSAPP}?text=${encodeURIComponent(waMsg)}`;
 
       result.innerHTML = `
@@ -807,23 +825,21 @@
         <div class="cta">
           <div>
             <strong>Falar no WhatsApp</strong><br/>
-            <span class="subtitle" style="margin:0;">Mensagem curta com seus dados básicos.</span>
+            <span class="subtitle" style="margin:0;">Envia seus dados (nome, empresa, CNPJ, e-mail e telefone).</span>
           </div>
-          <a id="waCta" href="${waLink}" target="_blank" rel="noopener">📱 WhatsApp</a>
+          <a href="${waLink}" target="_blank" rel="noopener">📱 WhatsApp</a>
         </div>
 
         <div class="smallnote" id="sendNote">Registrando seus dados...</div>
       `;
     }
 
-    // --- Sheets send ---
     function sendToGoogleSheets(payload){
-      if(!GOOGLE_SHEETS_WEBAPP_URL) return false;
-
       try{
         if (navigator.sendBeacon) {
           const blob = new Blob([JSON.stringify(payload)], { type: 'application/json' });
-          return navigator.sendBeacon(GOOGLE_SHEETS_WEBAPP_URL, blob);
+          const ok = navigator.sendBeacon(GOOGLE_SHEETS_WEBAPP_URL, blob);
+          return ok;
         }
       }catch(e){}
 
@@ -861,11 +877,13 @@
       document.getElementById('btnToForm').addEventListener('click', openForm);
       document.getElementById('btnBackForm').addEventListener('click', () => goBack('question4'));
 
-      const phone = document.getElementById('phone');
-      phone.addEventListener('input', (e) => { e.target.value = phoneMask(e.target.value); });
+      document.getElementById('phone').addEventListener('input', (e) => {
+        e.target.value = phoneMask(e.target.value);
+      });
 
-      const cnpj = document.getElementById('cnpj');
-      cnpj.addEventListener('input', (e) => { e.target.value = maskCnpj(e.target.value); });
+      document.getElementById('cnpj').addEventListener('input', (e) => {
+        e.target.value = maskCnpj(e.target.value);
+      });
 
       document.getElementById('btnShowResult').addEventListener('click', () => {
         const note = document.getElementById('formNote');
@@ -898,14 +916,14 @@
           utm
         };
 
-        showResult(score, v.name, v.company, v.email);
+        showResult(score, v);
 
         const ok = sendToGoogleSheets(payload);
         setTimeout(() => {
           const sn = document.getElementById('sendNote');
           if(!sn) return;
-          sn.textContent = ok ? "✅ Dados registrados com sucesso." : "⚠️ Não foi possível confirmar o registro (verifique o Web App).";
-        }, 350);
+          sn.textContent = ok ? "✅ Dados registrados (envio disparado)." : "⚠️ Não foi possível disparar o envio (verifique o Web App).";
+        }, 300);
       });
     });
   </script>
