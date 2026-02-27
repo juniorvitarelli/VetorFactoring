@@ -43,14 +43,14 @@
     /* Mobile: vira 1 coluna e o painel da direita fica embaixo */
     @media (max-width: 860px){
       .wrap{ grid-template-columns: 1fr; }
-      aside.panel.side{ order: 2; }
       section.panel{ order: 1; }
+      aside.panel.side{ order: 2; }
     }
 
     @media (max-width: 520px){
       body { padding: 14px; }
-      .panel-inner { padding: 18px; }
-      .title{ font-size: 22px; }
+      .panel-inner { padding: 18px !important; }
+      .title{ font-size: 22px !important; }
     }
 
     .panel{
@@ -517,9 +517,11 @@
   </div>
 
   <script>
+    // ===== CONFIG =====
     const WHATSAPP = '5531988008600';
     const PRIVACY_POLICY_URL = 'https://SEU-DOMINIO.com/politica-de-privacidade';
-    const TS_WEBAPP_URL = 'https://script.google.com/macros/s/AKfycbx5aLOrrz_mFG8dt_fklclERm3_FVHQOlEV91O9ipbtjN3cicMRCu-nGXkL1wspe6iP/exec';
+    const GOOGLE_SHEETS_WEBAPP_URL = 'https://script.google.com/macros/s/AKfycbx5aLOrrz_mFG8dt_fklclERm3_FVHQOlEV91O9ipbtjN3cicMRCu-nGXkL1wspe6iP/exec';
+    // ==================
 
     let currentQuestion = 1;
     const answers = {};
@@ -688,7 +690,11 @@
 
       return {
         ok: okName && okCompany && okCnpj && okEmail && okPhone && okLgpd,
-        name, company, cnpj: onlyDigits(cnpjRaw), email, phone
+        name,
+        company,
+        cnpj: onlyDigits(cnpjRaw),
+        email,
+        phone
       };
     }
 
@@ -716,6 +722,7 @@
     }
 
     function sendToGoogleSheets(payload){
+      // Melhor para iOS/Android: sendBeacon
       try{
         if (navigator.sendBeacon) {
           const blob = new Blob([JSON.stringify(payload)], { type: 'application/json' });
@@ -723,6 +730,7 @@
         }
       }catch(e){}
 
+      // Fallback: fetch
       try{
         fetch(GOOGLE_SHEETS_WEBAPP_URL, {
           method: 'POST',
@@ -768,7 +776,10 @@
 
       const waMsg =
         `Olá! Quero antecipar meus recebíveis.\n\n` +
-        `Nome: ${lead.name}\nEmpresa: ${lead.company}\nCNPJ: ${lead.cnpj}\nE-mail: ${lead.email}`;
+        `Nome: ${lead.name}\n` +
+        `Empresa: ${lead.company}\n` +
+        `CNPJ: ${lead.cnpj}\n` +
+        `E-mail: ${lead.email}`;
 
       const waLink = `https://wa.me/${WHATSAPP}?text=${encodeURIComponent(waMsg)}`;
 
@@ -781,6 +792,7 @@
           </div>
         </div>
         <p class="subtitle">${desc}</p>
+
         <div class="box">
           <h3>✅ Próximo passo</h3>
           <ul>
@@ -789,6 +801,7 @@
             <li>Você recebe a proposta conforme seu perfil</li>
           </ul>
         </div>
+
         <div class="cta">
           <div>
             <strong>Falar no WhatsApp</strong><br/>
@@ -801,6 +814,7 @@
 
     document.addEventListener('DOMContentLoaded', () => {
       document.getElementById('policyLink').href = PRIVACY_POLICY_URL;
+
       captureUtm();
       wireOptionCards();
       watchRadios();
@@ -839,22 +853,23 @@
           timestamp: new Date().toISOString(),
           page_url: window.location.href,
           referrer: document.referrer || '',
-          score, status,
+          score,
+          status,
           name: lead.name,
-          email: lead.email,
-          phone: lead.phone,
           company: lead.company,
           cnpj: lead.cnpj,
+          email: lead.email,
+          phone: lead.phone,
           lgpd_consent: true,
           privacy_policy_url: PRIVACY_POLICY_URL,
           answers: { ...answers },
           utm
         };
 
-        // Opção B: grava no Sheets agora
+        // Opção B: envia para o Sheets AGORA
         sendToGoogleSheets(payload);
 
-        // mostra resultado
+        // Mostra resultado
         renderResult(score, lead);
       });
     });
